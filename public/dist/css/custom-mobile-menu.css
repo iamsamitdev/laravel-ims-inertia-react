@@ -1,0 +1,78 @@
+/* Custom Mobile Menu CSS */
+@media (max-width: 767.98px) {
+    /* ปรับแต่ง navbar บน mobile */
+    #navbar-menu {
+        background-color: #fff;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        border-radius: 0.25rem;
+        z-index: 1000;
+    }
+    
+    /* ทำให้ dropdown เมนูแสดงผลดีขึ้นบน mobile */
+    .navbar-nav .dropdown-menu {
+        position: static;
+        float: none;
+        width: 100%;
+        margin-top: 0;
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    
+    /* ปรับความกว้างของเมนูบน mobile */
+    .navbar-nav {
+        width: 100%;
+    }
+    
+    /* ปรับแต่ง dropdown-item */
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+        white-space: normal;
+    }
+    
+    /* เพิ่ม spacing ระหว่างรายการเมนู */
+    .nav-item {
+        margin-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding-bottom: 0.5rem;
+    }
+    
+    /* ไฮไลท์เมนูที่แอคทีฟ */
+    .nav-item.active {
+        background-color: rgba(32, 107, 196, 0.1);
+        border-radius: 0.25rem;
+    }
+    
+    /* ทำให้ dropdown icon ชัดเจนขึ้น */
+    .dropdown-toggle::after {
+        float: right;
+        margin-top: 0.5rem;
+    }
+
+    /* สไตล์สำหรับ Mobile Quick Access Menu */
+    .mobile-quick-item {
+        width: 70px;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .mobile-quick-item.active {
+        color: #206bc4;
+    }
+    
+    .mobile-quick-item:hover {
+        opacity: 0.8;
+    }
+    
+    .mobile-quick-item .rounded-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-quick-item.active .rounded-circle {
+        background-color: rgba(32, 107, 196, 0.2) !important;
+    }
+} 
