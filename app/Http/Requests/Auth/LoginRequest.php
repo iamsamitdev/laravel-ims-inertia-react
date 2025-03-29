@@ -35,6 +35,21 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'กรุณากรอกอีเมล',
+            'email.email' => 'รูปแบบอีเมลไม่ถูกต้อง',
+            'email.exists' => 'ไม่พบอีเมลนี้ในระบบ',
+            'password.required' => 'กรุณากรอกรหัสผ่าน',
+        ];
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -47,7 +62,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                $this->email => trans('auth.failed'),
+                'email' => 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
             ]);
         }
 
@@ -70,10 +85,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'email' => 'คุณพยายามเข้าสู่ระบบมากเกินไป กรุณารอ :seconds วินาที',
         ]);
     }
 

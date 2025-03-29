@@ -48,7 +48,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
             type="email"
             name="email"
             value={data.email}
-            className="mt-1 block w-full"
+            className="mt-1 p-2 block w-full"
             autoComplete="username"
             onChange={(e) => setData('email', e.target.value)}
           />
@@ -62,7 +62,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
             type="password"
             name="password"
             value={data.password}
-            className="mt-1 block w-full"
+            className="mt-1 p-2 block w-full"
             autoComplete="current-password"
             onChange={(e) => setData('password', e.target.value)}
           />

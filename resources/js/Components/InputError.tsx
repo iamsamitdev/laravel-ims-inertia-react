@@ -11,7 +11,7 @@ export default function InputError({ message, className = '' }: InputErrorProps)
   }
 
   return (
-    <div className={`invalid-feedback ${className}`}>
+    <div className={`text-sm text-red-600 dark:text-red-400 ${className}`}>
       {message}
     </div>
   )

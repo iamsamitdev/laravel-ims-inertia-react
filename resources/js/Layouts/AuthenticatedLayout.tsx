@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode, useState } from 'react'
+import { PropsWithChildren, ReactNode, useState, useEffect } from 'react'
 import { User } from '@/types'
 import { Link } from '@inertiajs/react'
 import Header from '@/Components/Header'
@@ -12,8 +12,37 @@ export default function Authenticated({
 }: PropsWithChildren<{ user: User; header?: ReactNode }>) {
   const [darkMode, setDarkMode] = useState(false)
 
+  // เพิ่ม dark mode
+  useEffect(() => {
+    // ตรวจสอบ system preference
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const savedDarkMode = localStorage.getItem('darkMode')
+    
+    // ถ้ามีค่าใน localStorage ให้ใช้ค่านั้น ไม่งั้นใช้ค่า system preference
+    const isDarkMode = savedDarkMode !== null ? savedDarkMode === 'true' : prefersDarkMode
+    setDarkMode(isDarkMode)
+    
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [])
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode
+    setDarkMode(newDarkMode)
+    localStorage.setItem('darkMode', String(newDarkMode))
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
+
   return (
-    <div className={`min-h-screen bg-gray-50 ${darkMode ? 'dark' : ''}`}>
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Header bar with user menu */}
       <Header user={user} darkMode={darkMode} setDarkMode={setDarkMode} />
       
