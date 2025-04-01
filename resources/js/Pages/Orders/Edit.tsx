@@ -3,6 +3,12 @@ import { Head, Link, router, useForm } from '@inertiajs/react'
 import { PageProps } from '@/types'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Breadcrumbs from '@/Components/Breadcrumbs'
+import InputError from '@/Components/InputError'
+import InputLabel from '@/Components/InputLabel'
+import TextInput from '@/Components/TextInput'
+import SelectInput from '@/Components/SelectInput'
+import DateInput from '@/Components/DateInput'
+import TextArea from '@/Components/TextArea'
 
 interface Customer {
   id: number
@@ -140,56 +146,67 @@ export default function Edit({ auth, order, customers }: EditProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <h2 className="page-title">แก้ไขคำสั่งซื้อ #{order.invoice_no}</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">แก้ไขคำสั่งซื้อ #{order.invoice_no}</h1>
           </div>
         </div>
       }
     >
       <Head title={`แก้ไขคำสั่งซื้อ: ${order.invoice_no}`} />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
           <form onSubmit={handleSubmit}>
-            <div className="row row-cards">
-              <div className="col-lg-8">
-                <div className="card">
-                  <div className="card-header">
-                    <h3 className="card-title">รายการสินค้า</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">รายการสินค้า</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="alert alert-info">
-                      การแก้ไขคำสั่งซื้อจะไม่สามารถเพิ่มสินค้าได้ แต่สามารถลบสินค้าออกจากรายการได้
+                  <div className="p-6">
+                    <div className="rounded-md bg-blue-50 dark:bg-blue-900 p-4 mb-6">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm text-blue-700 dark:text-blue-200">
+                            การแก้ไขคำสั่งซื้อจะไม่สามารถเพิ่มสินค้าได้ แต่สามารถลบสินค้าออกจากรายการได้
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="table-responsive">
-                      <table className="table table-vcenter card-table table-striped">
-                        <thead>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead className="bg-gray-50 dark:bg-gray-700">
                           <tr>
-                            <th>ลำดับ</th>
-                            <th>ชื่อสินค้า</th>
-                            <th className="text-center">ราคา</th>
-                            <th className="text-center">จำนวน</th>
-                            <th className="text-center">รวม</th>
-                            <th className="text-end">จัดการ</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ลำดับ</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ชื่อสินค้า</th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ราคา</th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">จำนวน</th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">รวม</th>
+                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">จัดการ</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                           {orderDetails.length > 0 ? (
                             orderDetails.map((detail, index) => (
-                              <tr key={detail.id}>
-                                <td>{index + 1}</td>
-                                <td>{detail.product.name}</td>
-                                <td className="text-center">฿{formatPrice(detail.unitcost)}</td>
-                                <td className="text-center">{detail.quantity}</td>
-                                <td className="text-center">฿{formatPrice(detail.total)}</td>
-                                <td className="text-end">
+                              <tr key={detail.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{detail.product.name}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-gray-100">฿{formatPrice(detail.unitcost)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-gray-100">{detail.quantity}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-gray-100">฿{formatPrice(detail.total)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
                                   <button 
                                     type="button"
-                                    className="btn btn-danger btn-sm"
+                                    className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                     onClick={() => handleRemoveProduct(index)}
                                   >
                                     ลบ
@@ -199,24 +216,24 @@ export default function Edit({ auth, order, customers }: EditProps) {
                             ))
                           ) : (
                             <tr>
-                              <td colSpan={6} className="text-center">ไม่มีรายการสินค้า</td>
+                              <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">ไม่มีรายการสินค้า</td>
                             </tr>
                           )}
                         </tbody>
-                        <tfoot>
+                        <tfoot className="bg-gray-50 dark:bg-gray-700">
                           <tr>
-                            <td colSpan={4} className="text-end">รวม</td>
-                            <td className="text-center">฿{formatPrice(subTotal)}</td>
+                            <td colSpan={4} className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">รวม</td>
+                            <td className="px-6 py-4 text-center text-sm text-gray-900 dark:text-gray-100">฿{formatPrice(subTotal)}</td>
                             <td></td>
                           </tr>
                           <tr>
-                            <td colSpan={4} className="text-end">ภาษีมูลค่าเพิ่ม 7%</td>
-                            <td className="text-center">฿{formatPrice(vat)}</td>
+                            <td colSpan={4} className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">ภาษีมูลค่าเพิ่ม 7%</td>
+                            <td className="px-6 py-4 text-center text-sm text-gray-900 dark:text-gray-100">฿{formatPrice(vat)}</td>
                             <td></td>
                           </tr>
                           <tr>
-                            <td colSpan={4} className="text-end"><strong>ยอดรวมทั้งสิ้น</strong></td>
-                            <td className="text-center"><strong>฿{formatPrice(total)}</strong></td>
+                            <td colSpan={4} className="px-6 py-4 text-right text-sm font-bold text-gray-900 dark:text-gray-100">ยอดรวมทั้งสิ้น</td>
+                            <td className="px-6 py-4 text-center text-sm font-bold text-gray-900 dark:text-gray-100">฿{formatPrice(total)}</td>
                             <td></td>
                           </tr>
                         </tfoot>
@@ -226,95 +243,101 @@ export default function Edit({ auth, order, customers }: EditProps) {
                 </div>
               </div>
 
-              <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header">
-                    <h3 className="card-title">ข้อมูลคำสั่งซื้อ</h3>
+              <div className="lg:col-span-1">
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">ข้อมูลคำสั่งซื้อ</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="mb-3">
-                      <label className="form-label" htmlFor="customer_id">ลูกค้า</label>
-                      <select
+                  <div className="p-6 space-y-6">
+                    <div>
+                      <SelectInput
                         id="customer_id"
-                        className={`form-select ${errors.customer_id ? 'is-invalid' : ''}`}
                         value={data.customer_id}
+                        label="ลูกค้า"
                         onChange={(e) => setData('customer_id', e.target.value)}
+                        error={errors.customer_id}
                         required
                       >
                         <option value="">-- เลือกลูกค้า --</option>
                         {customers.map(customer => (
                           <option key={customer.id} value={customer.id}>{customer.name}</option>
                         ))}
-                      </select>
-                      {errors.customer_id && <div className="invalid-feedback">{errors.customer_id}</div>}
+                      </SelectInput>
+                      <InputError message={errors.customer_id} className="mt-2" />
                     </div>
 
-                    <div className="mb-3">
-                      <label className="form-label" htmlFor="order_date">วันที่สั่งซื้อ</label>
-                      <input
+                    <div>
+                      <DateInput
                         id="order_date"
-                        type="date"
-                        className={`form-control ${errors.order_date ? 'is-invalid' : ''}`}
                         value={data.order_date}
+                        label="วันที่สั่งซื้อ"
                         onChange={(e) => setData('order_date', e.target.value)}
+                        error={errors.order_date}
                         required
                       />
-                      {errors.order_date && <div className="invalid-feedback">{errors.order_date}</div>}
+                      <InputError message={errors.order_date} className="mt-2" />
                     </div>
 
-                    <div className="mb-3">
-                      <label className="form-label" htmlFor="payment_type">ประเภทการชำระเงิน</label>
-                      <select
+                    <div>
+                      <SelectInput
                         id="payment_type"
-                        className={`form-select ${errors.payment_type ? 'is-invalid' : ''}`}
                         value={data.payment_type}
+                        label="ประเภทการชำระเงิน"
                         onChange={(e) => setData('payment_type', e.target.value)}
+                        error={errors.payment_type}
                         required
                       >
                         <option value="เงินสด">เงินสด</option>
                         <option value="โอนเงิน">โอนเงิน</option>
                         <option value="บัตรเครดิต">บัตรเครดิต</option>
                         <option value="เครดิต">เครดิต</option>
-                      </select>
-                      {errors.payment_type && <div className="invalid-feedback">{errors.payment_type}</div>}
+                      </SelectInput>
+                      <InputError message={errors.payment_type} className="mt-2" />
                     </div>
 
-                    <div className="mb-3">
-                      <label className="form-label" htmlFor="pay">จำนวนเงินที่ชำระ</label>
-                      <input
+                    <div>
+                      <InputLabel htmlFor="pay" value="จำนวนเงินที่ชำระ" />
+                      <TextInput
                         id="pay"
                         type="number"
-                        className={`form-control ${errors.pay ? 'is-invalid' : ''}`}
                         value={data.pay}
+                        className="mt-1 block w-full"
                         onChange={(e) => setData('pay', parseInt(e.target.value))}
                         max={total}
                         min={0}
                         required
                       />
-                      {errors.pay && <div className="invalid-feedback">{errors.pay}</div>}
-                      <small className="text-muted">
+                      <InputError message={errors.pay} className="mt-2" />
+                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         จำนวนเงินที่ค้างชำระ: ฿{formatPrice(total - (typeof data.pay === 'string' ? parseInt(data.pay || '0') : (data.pay || 0)))}
-                      </small>
+                      </p>
                     </div>
 
-                    <div className="mb-3">
-                      <label className="form-label" htmlFor="note">หมายเหตุ</label>
-                      <textarea
+                    <div>
+                      <TextArea
                         id="note"
-                        className={`form-control ${errors.note ? 'is-invalid' : ''}`}
                         value={data.note}
+                        label="หมายเหตุ"
                         onChange={(e) => setData('note', e.target.value)}
+                        error={errors.note}
                         rows={2}
-                      ></textarea>
-                      {errors.note && <div className="invalid-feedback">{errors.note}</div>}
+                      />
+                      <InputError message={errors.note} className="mt-2" />
                     </div>
                   </div>
-                  <div className="card-footer text-end">
-                    <div className="d-flex">
-                      <Link href={route('orders.show', order.id)} className="btn btn-outline-secondary me-2">
+                  <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                    <div className="flex justify-end space-x-3">
+                      <Link 
+                        href={route('orders.show', order.id)} 
+                        className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                      >
                         ยกเลิก
                       </Link>
-                      <button type="submit" className="btn btn-primary" disabled={processing || orderDetails.length === 0}>
+                      <button 
+                        type="submit" 
+                        className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                        disabled={processing || orderDetails.length === 0}
+                      >
                         {processing ? 'กำลังบันทึก...' : 'บันทึกคำสั่งซื้อ'}
                       </button>
                     </div>

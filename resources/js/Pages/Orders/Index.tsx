@@ -187,23 +187,19 @@ export default function Index({ auth, orders, filters }: OrdersProps) {
     <>
       <Link 
         href={route('orders.create')}
-        className="btn btn-primary d-none d-sm-inline-block"
+        className="hidden sm:inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
+        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
         </svg>
         สร้างคำสั่งซื้อใหม่
       </Link>
       <Link 
         href={route('orders.create')}
-        className="btn btn-primary d-sm-none btn-icon"
+        className="sm:hidden inline-flex items-center p-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
         </svg>
       </Link>
     </>
@@ -211,17 +207,29 @@ export default function Index({ auth, orders, filters }: OrdersProps) {
 
   // หน้าใหม่
   const tabs = (
-    <div className="d-flex mt-2 mb-3">
-      <Link href={route('orders.index')} className="btn active">
+    <div className="flex space-x-2 mt-4 mb-6">
+      <Link 
+        href={route('orders.index')} 
+        className="px-4 py-2 text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
         รายการทั้งหมด
       </Link>
-      <Link href={route('orders.pending')} className="btn">
+      <Link 
+        href={route('orders.pending')} 
+        className="px-4 py-2 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
         รออนุมัติ
       </Link>
-      <Link href={route('orders.complete')} className="btn">
+      <Link 
+        href={route('orders.complete')} 
+        className="px-4 py-2 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
         เสร็จสิ้น
       </Link>
-      <Link href={route('due.index')} className="btn">
+      <Link 
+        href={route('due.index')} 
+        className="px-4 py-2 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
         ค้างชำระ
       </Link>
     </div>
@@ -246,18 +254,18 @@ export default function Index({ auth, orders, filters }: OrdersProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">รายการ</div>
-            <h2 className="page-title">รายการสั่งซื้อ</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-sm text-gray-500 dark:text-gray-400">รายการ</div>
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">รายการสั่งซื้อ</h1>
           </div>
         </div>
       }
     >
       <Head title="รายการสั่งซื้อ" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           {tabs}

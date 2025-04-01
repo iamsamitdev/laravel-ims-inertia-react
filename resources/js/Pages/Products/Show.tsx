@@ -53,22 +53,20 @@ export default function Show({ auth, product, barcode }: ShowProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">รายละเอียด</div>
-            <h2 className="page-title">{product.name}</h2>
-          </div>
-          <div className="col-auto ms-auto">
-            <div className="btn-list">
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">รายละเอียด</div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{product.name}</h2>
+            </div>
+            <div className="mt-4 sm:mt-0">
               <Link
                 href={route('products.edit', product.slug)}
-                className="btn btn-primary d-none d-sm-inline-block"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
-                  <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
-                  <path d="M16 5l3 3"></path>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                  <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
                 </svg>
                 แก้ไขสินค้า
               </Link>
@@ -79,119 +77,126 @@ export default function Show({ auth, product, barcode }: ShowProps) {
     >
       <Head title={`สินค้า: ${product.name}`} />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
-          <div className="row row-cards">
-            <div className="col-lg-4">
-              <div className="card">
-                <div className="card-body">
-                  <h3 className="card-title">รูปสินค้า</h3>
-                  <div className="text-center">
-                    <img
-                      src={product.product_image ? `/storage/products/${product.product_image}` : '/assets/img/demo/product-placeholder.png'}
-                      alt={product.name}
-                      className="img-thumbnail"
-                      style={{ maxWidth: '100%', height: 'auto', maxHeight: '250px' }}
-                    />
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1">
+              <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">รูปสินค้า</h3>
+                </div>
+                <div className="p-6 text-center">
+                  <img
+                    src={product.product_image ? `/storage/products/${product.product_image}` : '/assets/img/demo/product-placeholder.png'}
+                    alt={product.name}
+                    className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700 mx-auto"
+                    style={{ maxHeight: '250px' }}
+                  />
                 </div>
               </div>
 
-              <div className="card mt-3">
-                <div className="card-body">
-                  <h3 className="card-title">บาร์โค้ด</h3>
-                  <div className="text-center">
-                    <div dangerouslySetInnerHTML={{ __html: barcode }} />
-                    <div className="mt-2">{product.code}</div>
-                  </div>
+              <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden mt-6">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">บาร์โค้ด</h3>
+                </div>
+                <div className="p-6 text-center">
+                  <div dangerouslySetInnerHTML={{ __html: barcode }} />
+                  <div className="mt-2 text-gray-700 dark:text-gray-300">{product.code}</div>
                 </div>
               </div>
             </div>
 
-            <div className="col-lg-8">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">ข้อมูลสินค้า</h3>
+            <div className="lg:col-span-2">
+              <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">ข้อมูลสินค้า</h3>
                 </div>
-                <div className="table-responsive">
-                  <table className="table table-bordered card-table table-vcenter text-nowrap">
-                    <tbody>
-                      <tr>
-                        <td style={{ width: '30%' }}>ชื่อสินค้า</td>
-                        <td>{product.name}</td>
-                      </tr>
-                      <tr>
-                        <td>Slug</td>
-                        <td>{product.slug}</td>
-                      </tr>
-                      <tr>
-                        <td>รหัสสินค้า</td>
-                        <td>{product.code}</td>
-                      </tr>
-                      <tr>
-                        <td>หมวดหมู่</td>
-                        <td>
-                          <Link href={route('categories.show', product.category.slug)}>
-                            {product.category.name}
-                          </Link>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>หน่วยวัด</td>
-                        <td>
-                          <Link href={route('units.show', product.unit.id)}>
-                            {product.unit.name} ({product.unit.short_code})
-                          </Link>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>จำนวนคงเหลือ</td>
-                        <td>
-                          <span className={product.quantity <= product.quantity_alert ? 'text-danger' : ''}>
-                            {product.quantity.toLocaleString()} {product.unit.short_code}
-                          </span>
-                          {product.quantity <= product.quantity_alert && (
-                            <span className="badge bg-danger ms-2">สินค้าใกล้หมด</span>
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>จำนวนแจ้งเตือน</td>
-                        <td>{product.quantity_alert.toLocaleString()} {product.unit.short_code}</td>
-                      </tr>
-                      <tr>
-                        <td>ราคาซื้อ</td>
-                        <td>฿{product.buying_price.toLocaleString('th-TH', { minimumFractionDigits: 2 })}</td>
-                      </tr>
-                      <tr>
-                        <td>ราคาขาย</td>
-                        <td>฿{product.selling_price.toLocaleString('th-TH', { minimumFractionDigits: 2 })}</td>
-                      </tr>
-                      <tr>
-                        <td>ภาษี</td>
-                        <td>{product.tax > 0 ? `${product.tax}% (${taxTypeText})` : 'ไม่มี'}</td>
-                      </tr>
-                      <tr>
-                        <td>วันที่สร้าง</td>
-                        <td>{new Date(product.created_at).toLocaleDateString('th-TH', { dateStyle: 'long' })}</td>
-                      </tr>
-                      <tr>
-                        <td>วันที่อัปเดต</td>
-                        <td>{new Date(product.updated_at).toLocaleDateString('th-TH', { dateStyle: 'long' })}</td>
-                      </tr>
-                      {product.notes && (
-                        <tr>
-                          <td>หมายเหตุ</td>
-                          <td>{product.notes}</td>
-                        </tr>
+                <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">ชื่อสินค้า</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{product.name}</div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">Slug</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{product.slug}</div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">รหัสสินค้า</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{product.code}</div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">หมวดหมู่</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">
+                      <Link 
+                        href={route('categories.show', product.category.slug)}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        {product.category.name}
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">หน่วยวัด</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">
+                      <Link 
+                        href={route('units.show', product.unit.id)}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        {product.unit.name} ({product.unit.short_code})
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนคงเหลือ</div>
+                    <div className="col-span-2">
+                      <span className={product.quantity <= product.quantity_alert ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'}>
+                        {product.quantity.toLocaleString()} {product.unit.short_code}
+                      </span>
+                      {product.quantity <= product.quantity_alert && (
+                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
+                          สินค้าใกล้หมด
+                        </span>
                       )}
-                    </tbody>
-                  </table>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนแจ้งเตือน</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{product.quantity_alert.toLocaleString()} {product.unit.short_code}</div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">ราคาซื้อ</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">฿{product.buying_price.toLocaleString('th-TH', { minimumFractionDigits: 2 })}</div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">ราคาขาย</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">฿{product.selling_price.toLocaleString('th-TH', { minimumFractionDigits: 2 })}</div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">ภาษี</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{product.tax > 0 ? `${product.tax}% (${taxTypeText})` : 'ไม่มี'}</div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">วันที่สร้าง</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{new Date(product.created_at).toLocaleDateString('th-TH', { dateStyle: 'long' })}</div>
+                  </div>
+                  <div className="grid grid-cols-3 px-6 py-4">
+                    <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">วันที่อัปเดต</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{new Date(product.updated_at).toLocaleDateString('th-TH', { dateStyle: 'long' })}</div>
+                  </div>
+                  {product.notes && (
+                    <div className="grid grid-cols-3 px-6 py-4">
+                      <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">หมายเหตุ</div>
+                      <div className="col-span-2 text-gray-900 dark:text-gray-100">{product.notes}</div>
+                    </div>
+                  )}
                 </div>
-                <div className="card-footer text-end">
-                  <Link href={route('products.index')} className="btn btn-outline-secondary">
+                <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 text-right">
+                  <Link 
+                    href={route('products.index')} 
+                    className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                  >
                     กลับไปยังรายการสินค้า
                   </Link>
                 </div>

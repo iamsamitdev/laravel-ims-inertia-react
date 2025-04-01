@@ -231,31 +231,29 @@ export default function Create({ auth, customers, products }: CreateProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="row g-2 align-items-center">
-          <div className="col">
-            <div className="page-pretitle">เอกสาร</div>
-            <h2 className="page-title">สร้างใบเสนอราคาใหม่</h2>
-          </div>
+        <div className="flex flex-col space-y-1">
+          <div className="text-sm text-gray-500 dark:text-gray-400">เอกสาร</div>
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">สร้างใบเสนอราคาใหม่</h2>
         </div>
       }
     >
       <Head title="สร้างใบเสนอราคาใหม่" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           <form onSubmit={handleSubmit}>
-            <div className="row">
-              <div className="col-md-8">
-                <div className="card mb-3">
-                  <div className="card-header">
-                    <h3 className="card-title">รายการสินค้า</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden mb-6">
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">รายการสินค้า</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="mb-3">
+                  <div className="p-4">
+                    <div className="mb-4">
                       <InputLabel htmlFor="product_search" value="ค้นหาสินค้า" />
-                      <div className="position-relative">
+                      <div className="relative">
                         <TextInput
                           id="product_search"
                           className="block w-full mt-1"
@@ -266,23 +264,23 @@ export default function Create({ auth, customers, products }: CreateProps) {
                         />
                         
                         {showSearchResults && searchResults.length > 0 && (
-                          <div className="position-absolute start-0 end-0 mt-1 bg-white border rounded-3 shadow-sm z-9999 search-results">
-                            <div className="list-group list-group-flush">
+                          <div className="absolute left-0 right-0 mt-1 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-md shadow-sm z-50 search-results">
+                            <div className="divide-y divide-gray-200 dark:divide-gray-700">
                               {searchResults.map(product => (
                                 <button
                                   key={product.id}
                                   type="button"
-                                  className="list-group-item list-group-item-action py-2"
+                                  className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-150 ease-in-out"
                                   onClick={() => handleAddProduct(product)}
                                 >
-                                  <div className="d-flex justify-content-between align-items-center">
+                                  <div className="flex justify-between items-center">
                                     <div>
-                                      <div className="fw-bold">{product.name}</div>
-                                      <div className="text-muted small">รหัส: {product.code}</div>
+                                      <div className="font-medium text-gray-800 dark:text-white">{product.name}</div>
+                                      <div className="text-sm text-gray-500 dark:text-gray-400">รหัส: {product.code}</div>
                                     </div>
-                                    <div className="text-end">
-                                      <div>฿{(product.price / 100).toLocaleString('th-TH')}</div>
-                                      <div className="text-muted small">คงเหลือ: {product.stock}</div>
+                                    <div className="text-right">
+                                      <div className="text-gray-800 dark:text-white">฿{(product.price / 100).toLocaleString('th-TH')}</div>
+                                      <div className="text-sm text-gray-500 dark:text-gray-400">คงเหลือ: {product.stock}</div>
                                     </div>
                                   </div>
                                 </button>
@@ -292,59 +290,61 @@ export default function Create({ auth, customers, products }: CreateProps) {
                         )}
                       </div>
                       {searchTerm && searchResults.length === 0 && showSearchResults && (
-                        <div className="text-danger mt-1">ไม่พบสินค้าที่ค้นหา</div>
+                        <div className="text-red-500 mt-1">ไม่พบสินค้าที่ค้นหา</div>
                       )}
                     </div>
                     
-                    <div className="table-responsive">
-                      <table className="table table-vcenter">
-                        <thead>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead className="bg-gray-50 dark:bg-gray-700">
                           <tr>
-                            <th>สินค้า</th>
-                            <th style={{ width: '140px' }}>ราคา/หน่วย</th>
-                            <th style={{ width: '100px' }}>จำนวน</th>
-                            <th style={{ width: '140px' }}>ยอดรวม</th>
-                            <th style={{ width: '50px' }}></th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">สินค้า</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-[140px]">ราคา/หน่วย</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-[100px]">จำนวน</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-[140px]">ยอดรวม</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-[50px]"></th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                           {items.length === 0 ? (
                             <tr>
-                              <td colSpan={5} className="text-center py-3">
+                              <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
                                 ยังไม่มีรายการสินค้า
                               </td>
                             </tr>
                           ) : (
                             items.map((item, index) => (
-                              <tr key={index}>
-                                <td>{item.product_name}</td>
-                                <td>
+                              <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{item.product_name}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm">
                                   <TextInput
                                     type="number"
                                     min="0"
                                     step="0.01"
                                     value={item.unit_price / 100} // แสดงราคาในรูปแบบบาท
                                     onChange={(e) => handleUnitPriceChange(index, parseFloat(e.target.value) * 100)} // แปลงกลับเป็นสตางค์
+                                    className="w-full"
                                   />
                                 </td>
-                                <td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm">
                                   <TextInput
                                     type="number"
                                     min="1"
                                     value={item.quantity}
                                     onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
+                                    className="w-full"
                                   />
                                 </td>
-                                <td className="text-end">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-right">
                                   ฿{(item.total_price / 100).toLocaleString('th-TH')}
                                 </td>
-                                <td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   <button
                                     type="button"
-                                    className="btn btn-icon btn-sm btn-ghost-danger"
+                                    className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-150"
                                     onClick={() => handleRemoveItem(index)}
                                   >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                       <path d="M18 6l-12 12" />
                                       <path d="M6 6l12 12" />
@@ -361,13 +361,13 @@ export default function Create({ auth, customers, products }: CreateProps) {
                 </div>
               </div>
               
-              <div className="col-md-4">
-                <div className="card mb-3">
-                  <div className="card-header">
-                    <h3 className="card-title">ข้อมูลใบเสนอราคา</h3>
+              <div className="space-y-6">
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">ข้อมูลใบเสนอราคา</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="mb-3">
+                  <div className="p-4">
+                    <div className="mb-4">
                       <InputLabel htmlFor="customer_id" value="ลูกค้า" required />
                       <SelectInput
                         id="customer_id"
@@ -385,7 +385,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.customer_id} className="mt-2" />
                     </div>
                     
-                    <div className="mb-3">
+                    <div className="mb-4">
                       <InputLabel htmlFor="reference" value="เลขที่อ้างอิง" />
                       <TextInput
                         id="reference"
@@ -397,36 +397,32 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.reference} className="mt-2" />
                     </div>
                     
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div className="mb-3">
-                          <InputLabel htmlFor="date" value="วันที่" required />
-                          <TextInput
-                            id="date"
-                            type="date"
-                            value={data.date}
-                            className="mt-1 block w-full"
-                            onChange={(e) => setData('date', e.target.value)}
-                          />
-                          <InputError message={errors.date} className="mt-2" />
-                        </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="mb-4">
+                        <InputLabel htmlFor="date" value="วันที่" required />
+                        <TextInput
+                          id="date"
+                          type="date"
+                          value={data.date}
+                          className="mt-1 block w-full"
+                          onChange={(e) => setData('date', e.target.value)}
+                        />
+                        <InputError message={errors.date} className="mt-2" />
                       </div>
-                      <div className="col-md-6">
-                        <div className="mb-3">
-                          <InputLabel htmlFor="due_date" value="วันที่หมดอายุ" required />
-                          <TextInput
-                            id="due_date"
-                            type="date"
-                            value={data.due_date}
-                            className="mt-1 block w-full"
-                            onChange={(e) => setData('due_date', e.target.value)}
-                          />
-                          <InputError message={errors.due_date} className="mt-2" />
-                        </div>
+                      <div className="mb-4">
+                        <InputLabel htmlFor="due_date" value="วันที่หมดอายุ" required />
+                        <TextInput
+                          id="due_date"
+                          type="date"
+                          value={data.due_date}
+                          className="mt-1 block w-full"
+                          onChange={(e) => setData('due_date', e.target.value)}
+                        />
+                        <InputError message={errors.due_date} className="mt-2" />
                       </div>
                     </div>
                     
-                    <div className="mb-3">
+                    <div className="mb-4">
                       <InputLabel htmlFor="status" value="สถานะ" required />
                       <SelectInput
                         id="status"
@@ -442,12 +438,12 @@ export default function Create({ auth, customers, products }: CreateProps) {
                   </div>
                 </div>
                 
-                <div className="card mb-3">
-                  <div className="card-header">
-                    <h3 className="card-title">ส่วนลดและภาษี</h3>
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">ส่วนลดและภาษี</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="mb-3">
+                  <div className="p-4">
+                    <div className="mb-4">
                       <InputLabel htmlFor="discount_type" value="ประเภทส่วนลด" />
                       <SelectInput
                         id="discount_type"
@@ -460,7 +456,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       </SelectInput>
                     </div>
                     
-                    <div className="mb-3">
+                    <div className="mb-4">
                       <InputLabel htmlFor="discount_value" value={`ส่วนลด ${data.discount_type === 'percentage' ? '(%)' : '(฿)'}`} />
                       <TextInput
                         id="discount_value"
@@ -474,7 +470,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.discount_value} className="mt-2" />
                     </div>
                     
-                    <div className="mb-3">
+                    <div className="mb-4">
                       <InputLabel htmlFor="tax_rate" value="อัตราภาษีมูลค่าเพิ่ม (%)" />
                       <TextInput
                         id="tax_rate"
@@ -493,34 +489,35 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.tax_rate} className="mt-2" />
                     </div>
                     
-                    <div className="py-2">
-                      <div className="d-flex justify-content-between mb-1">
-                        <span>ยอดรวม:</span>
-                        <span>฿{(subtotal / 100).toLocaleString('th-TH')}</span>
+                    <div className="py-2 text-sm">
+                      <div className="flex justify-between mb-2">
+                        <span className="text-gray-600 dark:text-gray-400">ยอดรวม:</span>
+                        <span className="text-gray-800 dark:text-gray-200">฿{(subtotal / 100).toLocaleString('th-TH')}</span>
                       </div>
-                      <div className="d-flex justify-content-between mb-1">
-                        <span>ส่วนลด:</span>
-                        <span>-฿{(parseFloat(data.discount_amount) / 100).toLocaleString('th-TH')}</span>
+                      <div className="flex justify-between mb-2">
+                        <span className="text-gray-600 dark:text-gray-400">ส่วนลด:</span>
+                        <span className="text-gray-800 dark:text-gray-200">-฿{(parseFloat(data.discount_amount) / 100).toLocaleString('th-TH')}</span>
                       </div>
-                      <div className="d-flex justify-content-between mb-1">
-                        <span>ภาษีมูลค่าเพิ่ม ({taxRate}%):</span>
-                        <span>฿{(taxAmount / 100).toLocaleString('th-TH')}</span>
+                      <div className="flex justify-between mb-2">
+                        <span className="text-gray-600 dark:text-gray-400">ภาษีมูลค่าเพิ่ม ({taxRate}%):</span>
+                        <span className="text-gray-800 dark:text-gray-200">฿{(taxAmount / 100).toLocaleString('th-TH')}</span>
                       </div>
-                      <hr />
-                      <div className="d-flex justify-content-between fw-bold">
-                        <span>ยอดรวมสุทธิ:</span>
-                        <span>฿{(grandTotal / 100).toLocaleString('th-TH')}</span>
+                      <div className="border-t border-gray-200 dark:border-gray-700 my-2 pt-2">
+                        <div className="flex justify-between font-medium">
+                          <span className="text-gray-800 dark:text-white">ยอดรวมสุทธิ:</span>
+                          <span className="text-gray-800 dark:text-white">฿{(grandTotal / 100).toLocaleString('th-TH')}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="card mb-3">
-                  <div className="card-header">
-                    <h3 className="card-title">หมายเหตุและเงื่อนไข</h3>
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">หมายเหตุและเงื่อนไข</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="mb-3">
+                  <div className="p-4">
+                    <div className="mb-4">
                       <InputLabel htmlFor="notes" value="หมายเหตุ" />
                       <TextArea
                         id="notes"
@@ -532,7 +529,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.notes} className="mt-2" />
                     </div>
                     
-                    <div className="mb-3">
+                    <div className="mb-4">
                       <InputLabel htmlFor="terms" value="เงื่อนไขและข้อตกลง" />
                       <TextArea
                         id="terms"
@@ -546,13 +543,16 @@ export default function Create({ auth, customers, products }: CreateProps) {
                   </div>
                 </div>
                 
-                <div className="d-flex justify-content-between">
-                  <Link href={route('quotations.index')} className="btn btn-outline-primary">
+                <div className="flex justify-between">
+                  <Link 
+                    href={route('quotations.index')} 
+                    className="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 text-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
+                  >
                     ยกเลิก
                   </Link>
                   <button 
                     type="submit" 
-                    className="btn btn-primary" 
+                    className="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-white text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-700 dark:hover:bg-blue-600" 
                     disabled={processing || loading}
                   >
                     {processing || loading ? 'กำลังบันทึก...' : 'บันทึก'}

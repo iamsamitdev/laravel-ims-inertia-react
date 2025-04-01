@@ -47,7 +47,7 @@ export default function Index({ auth, products, filters }: ProductsProps) {
       sortable: true,
       render: (product: Product) => (
         <div>
-          <div className="font-medium text-gray-900">{product.name}</div>
+          <div className="font-medium text-gray-900 dark:text-gray-100">{product.name}</div>
         </div>
       )
     },
@@ -72,7 +72,7 @@ export default function Index({ auth, products, filters }: ProductsProps) {
       label: 'ราคาขาย',
       sortable: true,
       render: (product: Product) => (
-        <span>฿{product.selling_price.toLocaleString('th-TH')}</span>
+        <span className="text-gray-900 dark:text-gray-100">฿{product.selling_price.toLocaleString('th-TH')}</span>
       )
     },
     {
@@ -80,22 +80,22 @@ export default function Index({ auth, products, filters }: ProductsProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (product: Product) => (
-        <div className="btn-list">
+        <div className="flex items-center space-x-2">
           <Link 
             href={route('products.show', product.slug)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             ดู
           </Link>
           <Link 
             href={route('products.edit', product.slug)} 
-            className="btn btn-sm btn-primary"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             แก้ไข
           </Link>
           <button 
             onClick={() => handleDelete(product.slug)}
-            className="btn btn-sm btn-danger"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             ลบ
           </button>
@@ -162,41 +162,34 @@ export default function Index({ auth, products, filters }: ProductsProps) {
 
   // ปุ่มสำหรับใส่ใน actions ของ DataTable
   const tableActions = (
-    <>
+    <div className="flex items-center space-x-3">
       <Link 
         href={route('products.import.view')}
-        className="btn btn-info me-2"
+        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-          <path d="M7 11l5 5l5 -5" />
-          <path d="M12 4l0 12" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
         </svg>
         นำเข้าสินค้า
       </Link>
       <Link 
         href={route('products.create')}
-        className="btn btn-primary"
+        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>
         สร้างสินค้าใหม่
       </Link>
       <Link 
         href={route('products.create')}
-        className="btn btn-primary d-sm-none btn-icon"
+        className="sm:hidden inline-flex items-center p-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>
       </Link>
-    </>
+    </div>
   )
 
   // การจัดรูปแบบข้อมูลการแบ่งหน้าสำหรับ DataTable
@@ -218,18 +211,26 @@ export default function Index({ auth, products, filters }: ProductsProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">รายการ</div>
-            <h2 className="page-title">สินค้า</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+              <div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  รายการ
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  สินค้า
+                </h2>
+              </div>
+            </div>
           </div>
         </div>
       }
     >
       <Head title="สินค้า" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           <DataTable

@@ -76,17 +76,17 @@ export default function Sales({ auth, quotations, filters }: QuotationsProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (quotation: Quotation) => (
-        <div className="btn-list">
+        <div className="flex items-center space-x-2">
           <Link 
             href={route('quotations.show', quotation.id)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             ดูใบเสนอราคา
           </Link>
           {quotation.order_id && (
             <Link 
               href={route('orders.show', quotation.order_id)} 
-              className="btn btn-sm btn-success"
+              className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
               ดูออเดอร์
             </Link>
@@ -161,18 +161,18 @@ export default function Sales({ auth, quotations, filters }: QuotationsProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">รายการ</div>
-            <h2 className="page-title">ใบเสนอราคาที่ขายแล้ว</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-sm text-gray-500 dark:text-gray-400">รายการ</div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">ใบเสนอราคาที่ขายแล้ว</h2>
           </div>
         </div>
       }
     >
       <Head title="ใบเสนอราคาที่ขายแล้ว" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           <DataTable

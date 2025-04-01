@@ -75,16 +75,14 @@ export default function DataTable({
     if (field !== sortField) return null
 
     return (
-      <span className="ms-1">
+      <span className="ml-1">
         {sortDirection === 'asc' ? (
-          <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-sm" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M5 12l7 -7l7 7" />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
           </svg>
         ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-sm" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M5 12l7 7l7 -7" />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         )}
       </span>
@@ -92,64 +90,76 @@ export default function DataTable({
   }
 
   return (
-    <div className="card">
+    <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
       {(title || actions) && (
-        <div className="card-header">
-          {title && <h3 className="card-title">{title}</h3>}
-          {actions && <div className="card-actions">{actions}</div>}
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            {title && (
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {title}
+              </h3>
+            )}
+            {actions && (
+              <div className="flex items-center space-x-3">
+                {actions}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
-      <div className="card-body border-bottom py-3">
-        <div className="d-flex">
-          <div className="text-secondary">
-            แสดง
-            <div className="mx-2 d-inline-block">
-              <select 
-                className="form-select form-select-sm" 
-                value={perPage}
-                onChange={handlePerPageChange}
-              >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={15}>15</option>
-                <option value={25}>25</option>
-              </select>
-            </div>
-            รายการ
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+          <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <span>แสดง</span>
+            <select 
+              className="block w-20 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              value={perPage}
+              onChange={handlePerPageChange}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+              <option value={25}>25</option>
+            </select>
+            <span>รายการ</span>
           </div>
-          <div className="ms-auto text-secondary">
-            ค้นหา:
-            <div className="ms-2 d-inline-block">
-              <input 
-                type="text" 
-                className="form-control form-control-sm" 
-                value={search}
-                onChange={handleSearch}
-              />
-            </div>
+          <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <span>ค้นหา:</span>
+            <input 
+              type="text" 
+              className="block w-64 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              value={search}
+              onChange={handleSearch}
+            />
           </div>
         </div>
       </div>
 
       {loading && (
-        <div className="progress progress-sm">
-          <div className="progress-bar progress-bar-indeterminate"></div>
+        <div className="relative">
+          <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-50"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          </div>
         </div>
       )}
 
-      <div className="table-responsive">
-        <table className={`table table-vcenter card-table ${loading ? 'opacity-50' : ''}`}>
-          <thead>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
               {columns.map((column, index) => (
-                <th key={index} className={column.className || ''}>
+                <th 
+                  key={index} 
+                  className={`px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider ${column.className || ''}`}
+                >
                   {column.sortable ? (
                     <button 
                       onClick={() => handleSort(column.field)}
-                      className="btn-sort"
+                      className="flex items-center space-x-1 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none"
                     >
-                      {column.label}
+                      <span>{column.label}</span>
                       {renderSortIcon(column.field)}
                     </button>
                   ) : (
@@ -159,12 +169,15 @@ export default function DataTable({
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {data.length > 0 ? (
               data.map((item, index) => (
-                <tr key={index}>
+                <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   {columns.map((column, colIndex) => (
-                    <td key={colIndex} className={column.className || ''}>
+                    <td 
+                      key={colIndex} 
+                      className={`px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 ${column.className || ''}`}
+                    >
                       {column.render 
                         ? column.render(item) 
                         : item[column.field]
@@ -175,7 +188,10 @@ export default function DataTable({
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length} className="text-center py-3">
+                <td 
+                  colSpan={columns.length} 
+                  className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400"
+                >
                   {noDataText}
                 </td>
               </tr>
@@ -185,26 +201,36 @@ export default function DataTable({
       </div>
 
       {pagination && (
-        <div className="card-footer d-flex align-items-center">
-          <p className="m-0 text-secondary">
-            แสดง <span>{pagination.from}</span>
-            ถึง <span>{pagination.to}</span> จาก <span>{pagination.total}</span> รายการ
-          </p>
+        <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              แสดง <span className="font-medium">{pagination.from}</span>
+              ถึง <span className="font-medium">{pagination.to}</span> จาก <span className="font-medium">{pagination.total}</span> รายการ
+            </p>
 
-          <ul className="pagination m-0 ms-auto">
-            {pagination.links.map((link, index) => (
-              <li 
-                key={index}
-                className={`page-item ${link.active ? 'active' : ''} ${!link.url ? 'disabled' : ''}`}
-              >
-                {link.url ? (
-                  <Link href={link.url} className="page-link" dangerouslySetInnerHTML={{ __html: link.label }} />
-                ) : (
-                  <span className="page-link" dangerouslySetInnerHTML={{ __html: link.label }} />
-                )}
-              </li>
-            ))}
-          </ul>
+            <div className="flex items-center space-x-1">
+              {pagination.links.map((link, index) => (
+                <div key={index}>
+                  {link.url ? (
+                    <Link
+                      href={link.url}
+                      className={`px-3 py-1 text-sm rounded-md ${
+                        link.active
+                          ? 'bg-blue-600 text-white'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      }`}
+                      dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                  ) : (
+                    <span
+                      className={`px-3 py-1 text-sm rounded-md text-gray-400 dark:text-gray-500 cursor-not-allowed`}
+                      dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>

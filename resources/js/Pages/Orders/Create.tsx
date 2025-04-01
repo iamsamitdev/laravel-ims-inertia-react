@@ -212,29 +212,29 @@ export default function Create({ auth, customers, products }: CreateProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <h2 className="page-title">เพิ่มคำสั่งซื้อใหม่</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">เพิ่มคำสั่งซื้อใหม่</h1>
           </div>
         </div>
       }
     >
       <Head title="เพิ่มคำสั่งซื้อใหม่" />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
           <form onSubmit={handleSubmit}>
-            <div className="row row-cards">
-              <div className="col-lg-8">
-                <div className="card">
-                  <div className="card-header">
-                    <h3 className="card-title">รายการสินค้า</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">รายการสินค้า</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="row g-3 mb-4">
-                      <div className="col-lg-6">
+                  <div className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
+                      <div className="md:col-span-6">
                         <SelectInput
                           id="product"
                           value={selectedProduct?.id || ''}
@@ -247,7 +247,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                           ))}
                         </SelectInput>
                       </div>
-                      <div className="col-lg-2">
+                      <div className="md:col-span-2">
                         <div className="mb-3">
                           <InputLabel htmlFor="quantity" value="จำนวน" />
                           <TextInput
@@ -261,20 +261,20 @@ export default function Create({ auth, customers, products }: CreateProps) {
                           />
                         </div>
                       </div>
-                      <div className="col-lg-4">
+                      <div className="md:col-span-4">
                         <div className="mb-3">
                           <InputLabel htmlFor="price" value="ราคา" />
-                          <div className="input-group">
+                          <div className="flex">
                             <TextInput
                               id="price"
                               type="text"
                               value={selectedProduct ? `฿${formatPrice(selectedProduct.selling_price * quantity)}` : ''}
-                              className="form-control"
+                              className="flex-1"
                               disabled={true}
                             />
                             <button 
                               type="button" 
-                              className="btn btn-primary"
+                              className="ml-2 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 disabled:opacity-50"
                               onClick={handleAddProduct}
                               disabled={!selectedProduct}
                             >
@@ -285,31 +285,31 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       </div>
                     </div>
 
-                    <div className="table-responsive">
-                      <table className="table table-vcenter card-table table-striped">
-                        <thead>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead className="bg-gray-50 dark:bg-gray-700">
                           <tr>
-                            <th>ลำดับ</th>
-                            <th>ชื่อสินค้า</th>
-                            <th className="text-center">ราคา</th>
-                            <th className="text-center">จำนวน</th>
-                            <th className="text-center">รวม</th>
-                            <th className="text-end">จัดการ</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ลำดับ</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ชื่อสินค้า</th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ราคา</th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">จำนวน</th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">รวม</th>
+                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">จัดการ</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                           {orderItems.length > 0 ? (
                             orderItems.map((item, index) => (
-                              <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{item.product_name}</td>
-                                <td className="text-center">฿{formatPrice(item.unitcost)}</td>
-                                <td className="text-center">{item.quantity}</td>
-                                <td className="text-center">฿{formatPrice(item.total)}</td>
-                                <td className="text-end">
+                              <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{item.product_name}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-gray-100">฿{formatPrice(item.unitcost)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-gray-100">{item.quantity}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-gray-100">฿{formatPrice(item.total)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
                                   <button 
                                     type="button"
-                                    className="btn btn-danger btn-sm"
+                                    className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                     onClick={() => handleRemoveProduct(index)}
                                   >
                                     ลบ
@@ -319,24 +319,24 @@ export default function Create({ auth, customers, products }: CreateProps) {
                             ))
                           ) : (
                             <tr>
-                              <td colSpan={6} className="text-center">ไม่มีรายการสินค้า</td>
+                              <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">ไม่มีรายการสินค้า</td>
                             </tr>
                           )}
                         </tbody>
-                        <tfoot>
+                        <tfoot className="bg-gray-50 dark:bg-gray-700">
                           <tr>
-                            <td colSpan={4} className="text-end">รวม</td>
-                            <td className="text-center">฿{formatPrice(subTotal)}</td>
+                            <td colSpan={4} className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">รวม</td>
+                            <td className="px-6 py-4 text-center text-sm text-gray-900 dark:text-gray-100">฿{formatPrice(subTotal)}</td>
                             <td></td>
                           </tr>
                           <tr>
-                            <td colSpan={4} className="text-end">ภาษีมูลค่าเพิ่ม 7%</td>
-                            <td className="text-center">฿{formatPrice(vat)}</td>
+                            <td colSpan={4} className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">ภาษีมูลค่าเพิ่ม 7%</td>
+                            <td className="px-6 py-4 text-center text-sm text-gray-900 dark:text-gray-100">฿{formatPrice(vat)}</td>
                             <td></td>
                           </tr>
                           <tr>
-                            <td colSpan={4} className="text-end"><strong>ยอดรวมทั้งสิ้น</strong></td>
-                            <td className="text-center"><strong>฿{formatPrice(total)}</strong></td>
+                            <td colSpan={4} className="px-6 py-4 text-right text-sm font-bold text-gray-900 dark:text-gray-100">ยอดรวมทั้งสิ้น</td>
+                            <td className="px-6 py-4 text-center text-sm font-bold text-gray-900 dark:text-gray-100">฿{formatPrice(total)}</td>
                             <td></td>
                           </tr>
                         </tfoot>
@@ -346,13 +346,13 @@ export default function Create({ auth, customers, products }: CreateProps) {
                 </div>
               </div>
 
-              <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header">
-                    <h3 className="card-title">ข้อมูลคำสั่งซื้อ</h3>
+              <div className="lg:col-span-1">
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">ข้อมูลคำสั่งซื้อ</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="mb-3">
+                  <div className="p-6 space-y-6">
+                    <div>
                       <SelectInput
                         id="customer_id"
                         value={data.customer_id}
@@ -369,7 +369,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.customer_id} className="mt-2" />
                     </div>
 
-                    <div className="mb-3">
+                    <div>
                       <DateInput
                         id="order_date"
                         value={data.order_date}
@@ -381,7 +381,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.order_date} className="mt-2" />
                     </div>
 
-                    <div className="mb-3">
+                    <div>
                       <SelectInput
                         id="payment_type"
                         value={data.payment_type}
@@ -398,7 +398,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.payment_type} className="mt-2" />
                     </div>
 
-                    <div className="mb-3">
+                    <div>
                       <InputLabel htmlFor="pay" value="จำนวนเงินที่ชำระ" />
                       <TextInput
                         id="pay"
@@ -411,12 +411,12 @@ export default function Create({ auth, customers, products }: CreateProps) {
                         required
                       />
                       <InputError message={errors.pay} className="mt-2" />
-                      <small className="text-muted">
+                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         จำนวนเงินที่ค้างชำระ: ฿{formatPrice(total - (parseInt(data.pay?.toString() || '0')))}
-                      </small>
+                      </p>
                     </div>
 
-                    <div className="mb-3">
+                    <div>
                       <TextArea
                         id="note"
                         value={data.note}
@@ -428,12 +428,19 @@ export default function Create({ auth, customers, products }: CreateProps) {
                       <InputError message={errors.note} className="mt-2" />
                     </div>
                   </div>
-                  <div className="card-footer text-end">
-                    <div className="d-flex">
-                      <Link href={route('orders.index')} className="btn btn-outline-secondary me-2">
+                  <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                    <div className="flex justify-end space-x-3">
+                      <Link 
+                        href={route('orders.index')} 
+                        className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                      >
                         ยกเลิก
                       </Link>
-                      <button type="submit" className="btn btn-primary" disabled={processing || orderItems.length === 0}>
+                      <button 
+                        type="submit" 
+                        className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                        disabled={processing || orderItems.length === 0}
+                      >
                         {processing ? 'กำลังบันทึก...' : 'บันทึกคำสั่งซื้อ'}
                       </button>
                     </div>
