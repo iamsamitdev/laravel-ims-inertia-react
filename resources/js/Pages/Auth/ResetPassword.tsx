@@ -62,7 +62,6 @@ export default function ResetPassword({ token, email }: { token: string, email: 
             className="mt-1 block w-full"
             autoComplete="new-password"
             onChange={(e) => setData('password', e.target.value)}
-            required
           />
           <InputError message={errors.password} className="mt-2" />
         </div>
@@ -77,7 +76,6 @@ export default function ResetPassword({ token, email }: { token: string, email: 
             className="mt-1 block w-full"
             autoComplete="new-password"
             onChange={(e) => setData('password_confirmation', e.target.value)}
-            required
           />
           <InputError message={errors.password_confirmation} className="mt-2" />
         </div>

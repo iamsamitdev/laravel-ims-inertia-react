@@ -50,8 +50,8 @@ export default function Authenticated({
       <Navbar />
 
       {/* Page Content */}
-      <main className="py-6">
-        <div className="px-4 mx-auto max-w-full">
+      <main className="py-16">
+        <div className="px-4 mx-auto">
           {header && (
             <div className="mb-6">
               {header}

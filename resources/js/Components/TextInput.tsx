@@ -1,5 +1,4 @@
-import React from 'react'
-import { ChangeEvent, forwardRef, InputHTMLAttributes } from 'react'
+import { forwardRef, InputHTMLAttributes } from 'react'
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string
@@ -10,7 +9,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     <input
       {...props}
       ref={ref}
-      className={`mt-1 block w-full rounded-md 
+      className={`mt-1 p-2 block w-full rounded-md 
         border border-gray-300 dark:border-gray-600 
         bg-white dark:bg-gray-900 
         text-gray-900 dark:text-gray-100 

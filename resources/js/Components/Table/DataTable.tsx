@@ -113,7 +113,7 @@ export default function DataTable({
           <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
             <span>แสดง</span>
             <select 
-              className="block w-20 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="block w-20 p-2 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               value={perPage}
               onChange={handlePerPageChange}
             >
@@ -128,7 +128,7 @@ export default function DataTable({
             <span>ค้นหา:</span>
             <input 
               type="text" 
-              className="block w-64 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="block w-64 p-2 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               value={search}
               onChange={handleSearch}
             />

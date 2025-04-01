@@ -42,7 +42,7 @@ export default function Header({ user, darkMode, setDarkMode }: HeaderProps) {
   
   return (
     <nav className="fixed top-0 left-0 right-0 p-4 w-full z-10 bg-white/80 dark:bg-black/80 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800">
-      <div className="container-xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between">
           {/* Left side */}
           <div className="flex items-center">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetPasswordNotification;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -30,6 +31,17 @@ class User extends Authenticatable implements MustVerifyEmail
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * แทนที่เมธอดเดิมเพื่อส่งการแจ้งเตือนรีเซ็ตรหัสผ่านในภาษาไทย
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
 
     public function scopeSearch($query, $value): void
     {
