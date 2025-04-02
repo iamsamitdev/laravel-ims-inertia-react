@@ -231,9 +231,15 @@ export default function Create({ auth, customers, products }: CreateProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="flex flex-col space-y-1">
-          <div className="text-sm text-gray-500 dark:text-gray-400">เอกสาร</div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">สร้างใบเสนอราคาใหม่</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400">เอกสาร</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                สร้างใบเสนอราคาใหม่
+              </h2>
+            </div>
+          </div>
         </div>
       }
     >
@@ -264,7 +270,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
                         />
                         
                         {showSearchResults && searchResults.length > 0 && (
-                          <div className="absolute left-0 right-0 mt-1 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-md shadow-sm z-50 search-results">
+                          <div className="absolute left-0 right-0 mt-1 bg-white dark:bg-gray-700  rounded-md shadow-sm z-50 search-results">
                             <div className="divide-y divide-gray-200 dark:divide-gray-700">
                               {searchResults.map(product => (
                                 <button

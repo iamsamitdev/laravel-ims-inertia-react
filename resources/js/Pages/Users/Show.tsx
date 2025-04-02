@@ -2,22 +2,17 @@ import { Head, Link } from '@inertiajs/react'
 import { PageProps } from '@/types'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Breadcrumbs from '@/Components/Breadcrumbs'
+import { FaPencilAlt, FaLock, FaUnlock } from 'react-icons/fa'
 
 interface User {
   id: number
   name: string
   email: string
-  role: {
-    id: number
-    name: string
-  }
+  email_verified_at: string | null
   phone: string | null
   address: string | null
   bio: string | null
   profile_image: string | null
-  email_verified_at: string | null
-  created_at: string
-  updated_at: string
 }
 
 interface ShowProps extends PageProps {
@@ -35,146 +30,93 @@ export default function Show({ auth, user }: ShowProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="row g-2 align-items-center">
-          <div className="col">
-            <h2 className="page-title">ข้อมูลผู้ใช้งาน</h2>
-          </div>
-          <div className="col-auto ms-auto">
-            <div className="btn-list">
-              <Link 
-                href={route('users.edit', user.id)} 
-                className="btn btn-primary d-none d-sm-inline-block"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
-                  <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
-                  <path d="M16 5l3 3"></path>
-                </svg>
-                แก้ไขข้อมูล
-              </Link>
-              <Link 
-                href={route('users.edit', user.id)} 
-                className="btn btn-primary d-sm-none btn-icon"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
-                  <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
-                  <path d="M16 5l3 3"></path>
-                </svg>
-              </Link>
-            </div>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-sm text-gray-500 dark:text-gray-400">ผู้ใช้งาน</div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">ข้อมูลผู้ใช้งาน</h2>
           </div>
         </div>
       }
     >
-      <Head title={`ผู้ใช้งาน: ${user.name}`} />
+      <Head title={`ข้อมูลผู้ใช้งาน: ${user.name}`} />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="pb-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
-          <div className="row">
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-body text-center">
-                  <div className="mb-3">
-                    <img
-                      className="avatar avatar-xl rounded-circle mb-3"
-                      src={user.profile_image ? `/storage/profiles/${user.profile_image}` : '/assets/img/demo/user-placeholder.png'}
-                      alt={user.name}
-                    />
-                    <h3 className="m-0">{user.name}</h3>
-                    <p className="text-muted">{user.role?.name || 'ผู้ใช้งานทั่วไป'}</p>
-                  </div>
-                  <div className="d-flex">
-                    <a href={`mailto:${user.email}`} className="btn btn-primary w-100">
-                      ส่งอีเมล
-                    </a>
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1">
+              <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">ข้อมูลส่วนตัว</h3>
                 </div>
-                <div className="card-body">
-                  <div className="mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                      <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
-                      <path d="M3 7l9 6l9 -6" />
-                    </svg>
-                    <strong className="me-1">อีเมล:</strong>
-                    {user.email}
-                  </div>
-                  {user.phone && (
-                    <div className="mb-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                      </svg>
-                      <strong className="me-1">เบอร์โทรศัพท์:</strong>
-                      {user.phone}
+                <div className="p-6">
+                  <div className="flex flex-col items-center text-center mb-6">
+                    <img
+                      src={user.profile_image ? `/storage/profiles/${user.profile_image}` : '/assets/img/demo/user-placeholder.svg'}
+                      alt={user.name}
+                      className="h-32 w-32 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+                    />
+                    <h4 className="mt-4 text-xl font-medium text-gray-900 dark:text-gray-100">{user.name}</h4>
+                    <div className="flex mt-6 space-x-2">
+                      <Link
+                        href={route('users.edit', (user as any).username || user.id)}
+                        className="inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                      >
+                        <FaPencilAlt className="mr-2" />
+                        แก้ไข
+                      </Link>
                     </div>
-                  )}
-                  {user.address && (
-                    <div className="mb-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13" />
-                        <path d="M9 4v13" />
-                        <path d="M15 7v13" />
-                      </svg>
-                      <strong className="me-1">ที่อยู่:</strong>
-                      {user.address}
+                  </div>
+
+                  <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <div className="mb-4">
+                      <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">อีเมล</h5>
+                      <div className="flex items-center text-gray-900 dark:text-gray-100">
+                        {user.email}
+                        {user.email_verified_at ? (
+                          <span 
+                            className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                            title="ยืนยันอีเมลแล้ว"
+                          >
+                            <FaUnlock className="mr-1" size={10} />
+                            ยืนยันแล้ว
+                          </span>
+                        ) : (
+                          <span 
+                            className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                            title="ยังไม่ยืนยันอีเมล"
+                          >
+                            <FaLock className="mr-1" size={10} />
+                            ยังไม่ยืนยัน
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  )}
-                  <div className="mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                      <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                      <path d="M12 12l3 2" />
-                      <path d="M12 7v5" />
-                    </svg>
-                    <strong className="me-1">สถานะอีเมล:</strong>
-                    {user.email_verified_at ? 
-                        <span className="badge bg-success">ยืนยันแล้ว</span> : 
-                        <span className="badge bg-danger">ยังไม่ยืนยัน</span>
-                    }
-                  </div>
-                  <div className="mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                      <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                      <path d="M12 12l3 2" />
-                      <path d="M12 7v5" />
-                    </svg>
-                    <strong className="me-1">วันที่สร้าง:</strong>
-                    {new Date(user.created_at).toLocaleDateString('th-TH')}
-                  </div>
-                  <div className="mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                      <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                      <path d="M12 12l3 2" />
-                      <path d="M12 7v5" />
-                    </svg>
-                    <strong className="me-1">วันที่แก้ไขล่าสุด:</strong>
-                    {new Date(user.updated_at).toLocaleDateString('th-TH')}
+
+                    {user.phone && (
+                      <div className="mb-4">
+                        <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">เบอร์โทรศัพท์</h5>
+                        <div className="text-gray-900 dark:text-gray-100">{user.phone}</div>
+                      </div>
+                    )}
+
+                    {user.address && (
+                      <div className="mb-4">
+                        <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">ที่อยู่</h5>
+                        <div className="text-gray-900 dark:text-gray-100 whitespace-pre-line">{user.address}</div>
+                      </div>
+                    )}
+
+                    {user.bio && (
+                      <div className="mb-4">
+                        <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">ประวัติย่อ</h5>
+                        <div className="text-gray-900 dark:text-gray-100 whitespace-pre-line">{user.bio}</div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-md-8">
-              {user.bio && (
-                <div className="card">
-                  <div className="card-header">
-                    <h3 className="card-title">ประวัติย่อ</h3>
-                  </div>
-                  <div className="card-body">
-                    <p className="text-muted">
-                      {user.bio}
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

@@ -77,7 +77,7 @@ export default function Show({ auth, product, barcode }: ShowProps) {
     >
       <Head title={`สินค้า: ${product.name}`} />
 
-      <div className="py-12">
+      <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
@@ -89,7 +89,7 @@ export default function Show({ auth, product, barcode }: ShowProps) {
                 </div>
                 <div className="p-6 text-center">
                   <img
-                    src={product.product_image ? `/storage/products/${product.product_image}` : '/assets/img/demo/product-placeholder.png'}
+                    src={product.product_image ? `/storage/products/${product.product_image}` : '/assets/img/products/default.webp'}
                     alt={product.name}
                     className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700 mx-auto"
                     style={{ maxHeight: '250px' }}
@@ -129,30 +129,38 @@ export default function Show({ auth, product, barcode }: ShowProps) {
                   <div className="grid grid-cols-3 px-6 py-4">
                     <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">หมวดหมู่</div>
                     <div className="col-span-2 text-gray-900 dark:text-gray-100">
-                      <Link 
-                        href={route('categories.show', product.category.slug)}
-                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-                      >
-                        {product.category.name}
-                      </Link>
+                      {product.category ? (
+                        <Link 
+                          href={route('categories.show', product.category?.slug || product.category?.id)}
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          {product.category.name}
+                        </Link>
+                      ) : (
+                        <span>-</span>
+                      )}
                     </div>
                   </div>
                   <div className="grid grid-cols-3 px-6 py-4">
                     <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">หน่วยวัด</div>
                     <div className="col-span-2 text-gray-900 dark:text-gray-100">
-                      <Link 
-                        href={route('units.show', product.unit.id)}
-                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-                      >
-                        {product.unit.name} ({product.unit.short_code})
-                      </Link>
+                      {product.unit ? (
+                        <Link 
+                          href={route('units.show', product.unit.id)}
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          {product.unit.name} ({product.unit.short_code})
+                        </Link>
+                      ) : (
+                        <span>-</span>
+                      )}
                     </div>
                   </div>
                   <div className="grid grid-cols-3 px-6 py-4">
                     <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนคงเหลือ</div>
                     <div className="col-span-2">
                       <span className={product.quantity <= product.quantity_alert ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-gray-100'}>
-                        {product.quantity.toLocaleString()} {product.unit.short_code}
+                        {product.quantity.toLocaleString()} {product.unit?.short_code || ''}
                       </span>
                       {product.quantity <= product.quantity_alert && (
                         <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
@@ -163,7 +171,7 @@ export default function Show({ auth, product, barcode }: ShowProps) {
                   </div>
                   <div className="grid grid-cols-3 px-6 py-4">
                     <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนแจ้งเตือน</div>
-                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{product.quantity_alert.toLocaleString()} {product.unit.short_code}</div>
+                    <div className="col-span-2 text-gray-900 dark:text-gray-100">{product.quantity_alert.toLocaleString()} {product.unit?.short_code || ''}</div>
                   </div>
                   <div className="grid grid-cols-3 px-6 py-4">
                     <div className="col-span-1 text-sm font-medium text-gray-500 dark:text-gray-400">ราคาซื้อ</div>

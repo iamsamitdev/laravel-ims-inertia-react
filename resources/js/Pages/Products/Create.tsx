@@ -89,7 +89,7 @@ export default function Create({ auth, categories, units }: CreateProps) {
     >
       <Head title="เพิ่มสินค้าใหม่" />
 
-      <div className="py-12">
+      <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
@@ -103,7 +103,7 @@ export default function Create({ auth, categories, units }: CreateProps) {
                   <div className="p-6">
                     <img
                       className="w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700 mb-4"
-                      src={imagePreview || '/assets/img/demo/product-placeholder.png'}
+                      src={imagePreview || '/assets/img/products/default.webp'}
                       alt="รูปสินค้า"
                     />
 
@@ -373,7 +373,7 @@ export default function Create({ auth, categories, units }: CreateProps) {
                   <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 text-right">
                     <button 
                       type="submit" 
-                      className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150 ml-3"
+                      className="inline-flex items-center px-4 mr-2 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150 ml-3"
                       disabled={processing}
                     >
                       บันทึก

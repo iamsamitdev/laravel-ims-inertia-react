@@ -155,7 +155,7 @@ export default function Edit({ auth, order, customers }: EditProps) {
     >
       <Head title={`แก้ไขคำสั่งซื้อ: ${order.invoice_no}`} />
 
-      <div className="py-12">
+      <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 

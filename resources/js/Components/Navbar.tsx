@@ -5,6 +5,7 @@ export default function Navbar() {
   const [ordersDropdownOpen, setOrdersDropdownOpen] = useState(false)
   const [purchasesDropdownOpen, setPurchasesDropdownOpen] = useState(false)
   const [settingsDropdownOpen, setSettingsDropdownOpen] = useState(false)
+  const [pagesDropdownOpen, setPagesDropdownOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const toggleMobileMenu = () => {
@@ -16,10 +17,30 @@ export default function Navbar() {
     if (current !== 'orders') setOrdersDropdownOpen(false)
     if (current !== 'purchases') setPurchasesDropdownOpen(false)
     if (current !== 'settings') setSettingsDropdownOpen(false)
+    if (current !== 'pages') setPagesDropdownOpen(false)
   }
 
   return (
     <>
+      {/* Mobile Menu Toggle Button */}
+      <div className="fixed top-0 right-0 z-50 p-4 sm:hidden">
+        <button
+          onClick={toggleMobileMenu}
+          className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+        >
+          <span className="sr-only">เปิดเมนูหลัก</span>
+          {isMobileMenuOpen ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+      </div>
+
       {/* Desktop Navigation */}
       <div className="hidden sm:block mt-16">
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -35,7 +56,15 @@ export default function Navbar() {
                       : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
-                  แดชบอร์ด
+                  <span className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                      <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                      <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                    </svg>
+                    แดชบอร์ด
+                  </span>
                 </Link>
 
                 <Link 
@@ -46,7 +75,15 @@ export default function Navbar() {
                       : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
-                  สินค้า
+                  <span className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M7 16.5l-5 -3l5 -3l5 3v5.5l-5 3z" />
+                      <path d="M12 13.5l5 -3l5 3v5.5l-5 3l-5 -3" />
+                      <path d="M7 10.5l5 -3l5 3l-5 3z" />
+                    </svg>
+                    สินค้า
+                  </span>
                 </Link>
 
                 {/* Orders Dropdown */}
@@ -62,14 +99,22 @@ export default function Navbar() {
                         : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                   >
-                    คำสั่งซื้อ
+                    <span className="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M7 10l5 -6l5 6" />
+                        <path d="M21 10l-2 8a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2l-2 -8z" />
+                        <path d="M12 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                      </svg>
+                      คำสั่งซื้อ
+                    </span>
                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
 
                   {ordersDropdownOpen && (
-                    <div className="absolute left-0 z-10 w-48 py-1 mt-0 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-opacity-20">
+                    <div className="absolute left-0 z-10 w-48 py-1 mt-0 bg-white dark:bg-gray-800 rounded-md shadow-lg">
                       <Link href={route('orders.index')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         ทั้งหมด
                       </Link>
@@ -99,14 +144,23 @@ export default function Navbar() {
                         : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                   >
-                    การซื้อ
+                    <span className="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 5m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" />
+                        <path d="M3 10h18" />
+                        <path d="M7 15h.01" />
+                        <path d="M11 15h2" />
+                      </svg>
+                      การซื้อ
+                    </span>
                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
 
                   {purchasesDropdownOpen && (
-                    <div className="absolute left-0 z-10 w-48 py-1 mt-0 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-opacity-20">
+                    <div className="absolute left-0 z-10 w-48 py-1 mt-0 bg-white dark:bg-gray-800 rounded-md shadow-lg">
                       <Link href={route('purchases.index')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         ทั้งหมด
                       </Link>
@@ -128,8 +182,96 @@ export default function Navbar() {
                       : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
-                  ใบเสนอราคา
+                  <span className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                      <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                      <path d="M9 12h6" />
+                      <path d="M9 16h6" />
+                    </svg>
+                    ใบเสนอราคา
+                  </span>
                 </Link>
+                
+                {/* Pages Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setPagesDropdownOpen(!pagesDropdownOpen)
+                      closeOtherDropdowns('pages')
+                    }}
+                    className={`inline-flex items-center h-14 px-4 text-sm font-medium border-b-2 ${
+                      route().current('suppliers.*') || route().current('customers.*')
+                        ? 'text-blue-600 dark:text-blue-400 border-blue-500' 
+                        : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
+                  >
+                    <span className="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M8 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />
+                        <path d="M16 16v2a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2h2" />
+                      </svg>
+                      เพจ
+                    </span>
+                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {pagesDropdownOpen && (
+                    <div className="absolute left-0 z-10 w-48 py-1 mt-0 bg-white dark:bg-gray-800 rounded-md shadow-lg">
+                      <Link href={route('suppliers.index')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        ซัพพลายเออร์
+                      </Link>
+                      <Link href={route('customers.index')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        ลูกค้า
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Settings Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setSettingsDropdownOpen(!settingsDropdownOpen)
+                      closeOtherDropdowns('settings')
+                    }}
+                    className={`inline-flex items-center h-14 px-4 text-sm font-medium border-b-2 ${
+                      route().current('users.*') || route().current('categories.*') || route().current('units.*')
+                        ? 'text-blue-600 dark:text-blue-400 border-blue-500' 
+                        : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
+                  >
+                    <span className="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                      </svg>
+                      ตั้งค่า
+                    </span>
+                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {settingsDropdownOpen && (
+                    <div className="absolute left-0 z-10 w-48 py-1 mt-0 bg-white dark:bg-gray-800 rounded-md shadow-lg">
+                      <Link href={route('users.index')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        ผู้ใช้
+                      </Link>
+                      <Link href={route('categories.index')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        หมวดหมู่
+                      </Link>
+                      <Link href={route('units.index')} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        หน่วย
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -137,7 +279,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Navigation */}
-      <div id="mobile-menu" className="hidden sm:hidden bg-white dark:bg-gray-800 shadow-lg rounded-b-lg mt-1">
+      <div className={`sm:hidden bg-white dark:bg-gray-800 shadow-lg rounded-b-lg mt-1 ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-16 pb-3 space-y-1">
           {/* Mobile Quick Access */}
           <div className="grid grid-cols-4 gap-2 p-2 mb-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -206,7 +348,15 @@ export default function Navbar() {
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
-              <span>คำสั่งซื้อ</span>
+              <span className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M7 10l5 -6l5 6" />
+                  <path d="M21 10l-2 8a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2l-2 -8z" />
+                  <path d="M12 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                </svg>
+                คำสั่งซื้อ
+              </span>
               <svg
                 className={`w-5 h-5 transition-transform ${ordersDropdownOpen ? 'transform rotate-180' : ''}`}
                 fill="none"
@@ -260,7 +410,16 @@ export default function Navbar() {
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
-              <span>การซื้อ</span>
+              <span className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M3 5m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" />
+                  <path d="M3 10h18" />
+                  <path d="M7 15h.01" />
+                  <path d="M11 15h2" />
+                </svg>
+                การซื้อ
+              </span>
               <svg
                 className={`w-5 h-5 transition-transform ${purchasesDropdownOpen ? 'transform rotate-180' : ''}`}
                 fill="none"
@@ -305,6 +464,110 @@ export default function Navbar() {
           >
             ใบเสนอราคา
           </Link>
+
+          {/* Mobile Pages submenu */}
+          <div>
+            <button
+              onClick={() => {
+                setPagesDropdownOpen(!pagesDropdownOpen)
+                closeOtherDropdowns('pages')
+              }}
+              className={`flex justify-between w-full px-3 py-2 text-base font-medium rounded-md ${
+                route().current('suppliers.*') || route().current('customers.*')
+                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              <span className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M8 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />
+                  <path d="M16 16v2a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2h2" />
+                </svg>
+                เพจ
+              </span>
+              <svg
+                className={`w-5 h-5 transition-transform ${pagesDropdownOpen ? 'transform rotate-180' : ''}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            
+            {pagesDropdownOpen && (
+              <div className="px-3 py-2 mt-1 space-y-1 bg-gray-50 dark:bg-gray-700 rounded-md">
+                <Link
+                  href={route('suppliers.index')}
+                  className="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"
+                >
+                  ซัพพลายเออร์
+                </Link>
+                <Link
+                  href={route('customers.index')}
+                  className="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"
+                >
+                  ลูกค้า
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Settings submenu */}
+          <div>
+            <button
+              onClick={() => {
+                setSettingsDropdownOpen(!settingsDropdownOpen)
+                closeOtherDropdowns('settings')
+              }}
+              className={`flex justify-between w-full px-3 py-2 text-base font-medium rounded-md ${
+                route().current('users.*') || route().current('categories.*') || route().current('units.*')
+                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              <span className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                  <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                </svg>
+                ตั้งค่า
+              </span>
+              <svg
+                className={`w-5 h-5 transition-transform ${settingsDropdownOpen ? 'transform rotate-180' : ''}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            
+            {settingsDropdownOpen && (
+              <div className="px-3 py-2 mt-1 space-y-1 bg-gray-50 dark:bg-gray-700 rounded-md">
+                <Link
+                  href={route('users.index')}
+                  className="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"
+                >
+                  ผู้ใช้
+                </Link>
+                <Link
+                  href={route('categories.index')}
+                  className="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"
+                >
+                  หมวดหมู่
+                </Link>
+                <Link
+                  href={route('units.index')}
+                  className="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"
+                >
+                  หน่วย
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>

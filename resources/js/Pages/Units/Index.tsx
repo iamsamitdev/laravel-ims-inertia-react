@@ -43,7 +43,7 @@ export default function Index({ auth, units, filters }: UnitsProps) {
       sortable: true,
       render: (unit: Unit) => (
         <div>
-          <div className="font-medium text-gray-900">{unit.name}</div>
+          <div className="font-medium text-gray-900 dark:text-gray-100">{unit.name}</div>
         </div>
       )
     },
@@ -62,22 +62,22 @@ export default function Index({ auth, units, filters }: UnitsProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (unit: Unit) => (
-        <div className="btn-list">
+        <div className="flex items-center space-x-2">
           <Link 
             href={route('units.show', unit.slug)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-2.5 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"
           >
             ดู
           </Link>
           <Link 
             href={route('units.edit', unit.slug)} 
-            className="btn btn-sm btn-primary"
+            className="inline-flex items-center px-2.5 py-1 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
           >
             แก้ไข
           </Link>
           <button 
             onClick={() => handleDelete(unit.id)}
-            className="btn btn-sm btn-danger"
+            className="inline-flex items-center px-2.5 py-1 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
           >
             ลบ
           </button>
@@ -147,9 +147,9 @@ export default function Index({ auth, units, filters }: UnitsProps) {
     <>
       <Link 
         href={route('units.create')}
-        className="btn btn-primary d-none d-sm-inline-block"
+        className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 hidden sm:inline-flex"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
           <path d="M12 5l0 14" />
           <path d="M5 12l14 0" />
@@ -158,9 +158,9 @@ export default function Index({ auth, units, filters }: UnitsProps) {
       </Link>
       <Link 
         href={route('units.create')}
-        className="btn btn-primary d-sm-none btn-icon"
+        className="inline-flex items-center p-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 sm:hidden"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
           <path d="M12 5l0 14" />
           <path d="M5 12l14 0" />
@@ -188,18 +188,22 @@ export default function Index({ auth, units, filters }: UnitsProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="row g-2 align-items-center">
-          <div className="col">
-            <div className="page-pretitle">รายการ</div>
-            <h2 className="page-title">หน่วยวัด</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400">รายการ</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                หน่วยวัด
+              </h2>
+            </div>
           </div>
         </div>
       }
     >
       <Head title="หน่วยวัด" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-6">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           <DataTable

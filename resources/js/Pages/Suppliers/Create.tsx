@@ -50,134 +50,136 @@ export default function Create({ auth }: PageProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">ฟอร์ม</div>
-            <h2 className="page-title">เพิ่มซัพพลายเออร์ใหม่</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-sm text-gray-500 dark:text-gray-400">ฟอร์ม</div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">เพิ่มซัพพลายเออร์ใหม่</h2>
           </div>
         </div>
       }
     >
       <Head title="เพิ่มซัพพลายเออร์ใหม่" />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="pb-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
           <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <div className="row">
-              <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-body">
-                    <h3 className="card-title">รูปโปรไฟล์</h3>
-
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">รูปโปรไฟล์</h3>
+                  </div>
+                  <div className="p-6">
                     <img
-                      className="img-account-profile mb-2"
+                      className="w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700 mb-4"
                       src={imagePreview || '/assets/img/demo/user-placeholder.svg'}
-                      alt="Preview"
-                      style={{ maxWidth: '100%', height: 'auto' }}
+                      alt="รูปโปรไฟล์"
                     />
 
-                    <div className="small font-italic text-muted mb-2">
+                    <div className="text-sm italic text-gray-500 dark:text-gray-400 mb-4">
                       JPG หรือ PNG ขนาดไม่เกิน 1 MB
                     </div>
 
-                    <input
-                      className={`form-control ${errors.photo ? 'is-invalid' : ''}`}
-                      type="file"
-                      id="image"
-                      name="photo"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                    />
-
-                    {errors.photo && (
-                      <div className="invalid-feedback">{errors.photo}</div>
-                    )}
+                    <div className="relative">
+                      <input
+                        className={`w-full px-3 py-2 border ${errors.photo ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
+                        type="file"
+                        id="image"
+                        name="photo"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                      {errors.photo && (
+                        <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.photo}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="col-lg-8">
-                <div className="card">
-                  <div className="card-body">
-                    <h3 className="card-title">รายละเอียดซัพพลายเออร์</h3>
-
-                    <div className="row row-cards">
-                      <div className="col-md-12">
-                        <div className="mb-3">
-                          <label htmlFor="name" className="form-label required">
-                            ชื่อ
+              <div className="lg:col-span-2">
+                <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">รายละเอียดซัพพลายเออร์</h3>
+                  </div>
+                  <div className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="md:col-span-2">
+                        <div className="mb-4">
+                          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            ชื่อ <span className="text-red-600">*</span>
                           </label>
                           <input
                             id="name"
                             type="text"
-                            className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.name ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
                           />
                           {errors.name && (
-                            <div className="invalid-feedback">{errors.name}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.name}</p>
                           )}
                         </div>
 
-                        <div className="mb-3">
-                          <label htmlFor="email" className="form-label required">
-                            อีเมล
+                        <div className="mb-4">
+                          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            อีเมล <span className="text-red-600">*</span>
                           </label>
                           <input
                             id="email"
                             type="email"
-                            className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.email ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
                           />
                           {errors.email && (
-                            <div className="invalid-feedback">{errors.email}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.email}</p>
                           )}
                         </div>
 
-                        <div className="mb-3">
-                          <label htmlFor="shopname" className="form-label required">
-                            ชื่อร้าน
+                        <div className="mb-4">
+                          <label htmlFor="shopname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            ชื่อร้าน <span className="text-red-600">*</span>
                           </label>
                           <input
                             id="shopname"
                             type="text"
-                            className={`form-control ${errors.shopname ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.shopname ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             value={data.shopname}
                             onChange={(e) => setData('shopname', e.target.value)}
                           />
                           {errors.shopname && (
-                            <div className="invalid-feedback">{errors.shopname}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.shopname}</p>
                           )}
                         </div>
 
-                        <div className="mb-3">
-                          <label htmlFor="phone" className="form-label required">
-                            เบอร์โทรศัพท์
+                        <div className="mb-4">
+                          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            เบอร์โทรศัพท์ <span className="text-red-600">*</span>
                           </label>
                           <input
                             id="phone"
                             type="text"
-                            className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.phone ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             value={data.phone}
                             onChange={(e) => setData('phone', e.target.value)}
                           />
                           {errors.phone && (
-                            <div className="invalid-feedback">{errors.phone}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.phone}</p>
                           )}
                         </div>
                       </div>
 
-                      <div className="col-sm-6 col-md-6">
-                        <div className="mb-3">
-                          <label htmlFor="type" className="form-label required">
-                            ประเภทซัพพลายเออร์
+                      <div>
+                        <div className="mb-4">
+                          <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            ประเภทซัพพลายเออร์ <span className="text-red-600">*</span>
                           </label>
                           <select
                             id="type"
-                            className={`form-select ${errors.type ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.type ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             value={data.type}
                             onChange={(e) => setData('type', e.target.value)}
                           >
@@ -189,96 +191,96 @@ export default function Create({ auth }: PageProps) {
                             <option value="producer">ผู้ผลิต (Producer)</option>
                           </select>
                           {errors.type && (
-                            <div className="invalid-feedback">{errors.type}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.type}</p>
                           )}
                         </div>
                       </div>
 
-                      <div className="col-sm-6 col-md-6">
-                        <div className="mb-3">
-                          <label htmlFor="bank_name" className="form-label">
+                      <div>
+                        <div className="mb-4">
+                          <label htmlFor="bank_name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             ชื่อธนาคาร
                           </label>
                           <input
                             id="bank_name"
                             type="text"
-                            className={`form-control ${errors.bank_name ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.bank_name ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             value={data.bank_name}
                             onChange={(e) => setData('bank_name', e.target.value)}
                           />
                           {errors.bank_name && (
-                            <div className="invalid-feedback">{errors.bank_name}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.bank_name}</p>
                           )}
                         </div>
                       </div>
 
-                      <div className="col-sm-6 col-md-6">
-                        <div className="mb-3">
-                          <label htmlFor="account_holder" className="form-label">
+                      <div>
+                        <div className="mb-4">
+                          <label htmlFor="account_holder" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             ชื่อเจ้าของบัญชี
                           </label>
                           <input
                             id="account_holder"
                             type="text"
-                            className={`form-control ${errors.account_holder ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.account_holder ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             value={data.account_holder}
                             onChange={(e) => setData('account_holder', e.target.value)}
                           />
                           {errors.account_holder && (
-                            <div className="invalid-feedback">{errors.account_holder}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.account_holder}</p>
                           )}
                         </div>
                       </div>
 
-                      <div className="col-sm-6 col-md-6">
-                        <div className="mb-3">
-                          <label htmlFor="account_number" className="form-label">
+                      <div>
+                        <div className="mb-4">
+                          <label htmlFor="account_number" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             เลขที่บัญชี
                           </label>
                           <input
                             id="account_number"
                             type="text"
-                            className={`form-control ${errors.account_number ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.account_number ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             value={data.account_number}
                             onChange={(e) => setData('account_number', e.target.value)}
                           />
                           {errors.account_number && (
-                            <div className="invalid-feedback">{errors.account_number}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.account_number}</p>
                           )}
                         </div>
                       </div>
 
-                      <div className="col-md-12">
-                        <div className="mb-3">
-                          <label htmlFor="address" className="form-label required">
-                            ที่อยู่
+                      <div className="md:col-span-2">
+                        <div className="mb-4">
+                          <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            ที่อยู่ <span className="text-red-600">*</span>
                           </label>
                           <textarea
                             id="address"
-                            className={`form-control ${errors.address ? 'is-invalid' : ''}`}
+                            className={`w-full px-3 py-2 border ${errors.address ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300`}
                             rows={3}
                             value={data.address}
                             onChange={(e) => setData('address', e.target.value)}
                           ></textarea>
                           {errors.address && (
-                            <div className="invalid-feedback">{errors.address}</div>
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.address}</p>
                           )}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="card-footer text-end">
+                  <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 text-right">
                     <button 
                       type="submit" 
-                      className="btn btn-primary"
+                      className="inline-flex items-center px-4 mr-2 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150 ml-3"
                       disabled={processing}
                     >
                       บันทึก
                     </button>
                     <Link
                       href={route('suppliers.index')}
-                      className="btn btn-outline-secondary ms-2"
+                      className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
                     >
                       ยกเลิก
                     </Link>

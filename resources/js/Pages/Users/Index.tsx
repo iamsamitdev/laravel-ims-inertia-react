@@ -15,6 +15,7 @@ interface User {
   }
   email_verified_at: string | null
   created_at: string
+  username: string
 }
 
 interface UsersProps extends PageProps {
@@ -55,7 +56,9 @@ export default function Index({ auth, users, filters }: UsersProps) {
       label: 'สิทธิ์การใช้งาน',
       sortable: true,
       render: (user: User) => (
-        <span className="badge bg-blue me-1">{user.role?.name || 'ผู้ใช้งานทั่วไป'}</span>
+        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+          {user.role?.name || 'ผู้ใช้งานทั่วไป'}
+        </span>
       )
     },
     {
@@ -64,8 +67,8 @@ export default function Index({ auth, users, filters }: UsersProps) {
       sortable: true,
       render: (user: User) => (
         user.email_verified_at ? 
-          <span className="badge bg-success me-1">ยืนยันแล้ว</span> : 
-          <span className="badge bg-danger me-1">ยังไม่ยืนยัน</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">ยืนยันแล้ว</span> : 
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">ยังไม่ยืนยัน</span>
       )
     },
     {
@@ -73,7 +76,7 @@ export default function Index({ auth, users, filters }: UsersProps) {
       label: 'วันที่สร้าง',
       sortable: true,
       render: (user: User) => (
-        <span>{new Date(user.created_at).toLocaleDateString('th-TH')}</span>
+        <span className="text-gray-900 dark:text-gray-100">{new Date(user.created_at).toLocaleDateString('th-TH')}</span>
       )
     },
     {
@@ -81,23 +84,23 @@ export default function Index({ auth, users, filters }: UsersProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (user: User) => (
-        <div className="btn-list">
+        <div className="flex items-center space-x-2">
           <Link 
-            href={route('users.show', user.id)} 
-            className="btn btn-sm"
+            href={route('users.show', user.username)} 
+            className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             ดู
           </Link>
           <Link 
-            href={route('users.edit', user.id)} 
-            className="btn btn-sm btn-primary"
+            href={route('users.edit', user.username)} 
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             แก้ไข
           </Link>
           <button 
-            onClick={() => handleDelete(user.id)}
-            className="btn btn-sm btn-danger"
-            disabled={user.id === auth.user.id}
+            onClick={() => handleDelete(user.username)}
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+            disabled={user.username === (auth.user as any).username}
           >
             ลบ
           </button>
@@ -152,14 +155,14 @@ export default function Index({ auth, users, filters }: UsersProps) {
   }
 
   // จัดการการลบรายการ
-  const handleDelete = (id: number) => {
-    if (id === auth.user.id) {
+  const handleDelete = (username: string) => {
+    if (username === (auth.user as any).username) {
       alert('ไม่สามารถลบบัญชีของตัวเองได้')
       return
     }
 
     if (confirm('คุณแน่ใจหรือไม่ที่จะลบผู้ใช้นี้?')) {
-      router.delete(route('users.destroy', id), {
+      router.delete(route('users.destroy', username), {
         onSuccess: () => {
           // แสดง toast หรือ notification แจ้งลบสำเร็จ
         }
@@ -169,29 +172,25 @@ export default function Index({ auth, users, filters }: UsersProps) {
 
   // ปุ่มสำหรับใส่ใน actions ของ DataTable
   const tableActions = (
-    <>
+    <div className="flex items-center space-x-3">
       <Link 
         href={route('users.create')}
-        className="btn btn-primary d-none d-sm-inline-block"
+        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>
         เพิ่มผู้ใช้ใหม่
       </Link>
       <Link 
         href={route('users.create')}
-        className="btn btn-primary d-sm-none btn-icon"
+        className="sm:hidden inline-flex items-center p-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>
       </Link>
-    </>
+    </div>
   )
 
   // การจัดรูปแบบข้อมูลการแบ่งหน้าสำหรับ DataTable
@@ -213,18 +212,22 @@ export default function Index({ auth, users, filters }: UsersProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="row g-2 align-items-center">
-          <div className="col">
-            <div className="page-pretitle">รายการ</div>
-            <h2 className="page-title">ผู้ใช้งาน</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+              <div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">รายการ</div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">ผู้ใช้งาน</h2>
+              </div>
+            </div>
           </div>
         </div>
       }
     >
       <Head title="ผู้ใช้งาน" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="pb-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           <DataTable

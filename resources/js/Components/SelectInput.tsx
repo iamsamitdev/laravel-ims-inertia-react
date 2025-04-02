@@ -22,7 +22,7 @@ export default function SelectInput({
       {label && <InputLabel value={label} htmlFor={props.id} />}
       <select
         {...props}
-        className={`mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
+        className={`mt-1 block p-2 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
           error ? 'border-red-500 dark:border-red-500' : ''
         } ${className}`}
       >

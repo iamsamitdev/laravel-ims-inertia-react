@@ -20,7 +20,7 @@ export default function TextArea({
       {label && <InputLabel value={label} htmlFor={props.id} />}
       <textarea
         {...props}
-        className={`mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 
+        className={`mt-1 block p-2 w-full rounded-md border-gray-300 dark:border-gray-600 
           bg-white dark:bg-gray-800 
           text-gray-900 dark:text-gray-100 
           placeholder-gray-500 dark:placeholder-gray-400

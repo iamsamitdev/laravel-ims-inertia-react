@@ -53,7 +53,7 @@ export default function Index({ auth, orders, filters }: DueOrdersProps) {
       label: 'เลขที่ใบแจ้งหนี้',
       sortable: true,
       render: (order: Order) => (
-        <Link href={route('due.show', order.id)} className="text-decoration-none">
+        <Link href={route('due.show', order.id)} className="text-blue-600 hover:text-blue-800 hover:underline">
           {order.invoice_no}
         </Link>
       )
@@ -63,7 +63,7 @@ export default function Index({ auth, orders, filters }: DueOrdersProps) {
       label: 'ลูกค้า',
       sortable: true,
       render: (order: Order) => (
-        <Link href={route('customers.show', order.customer_id)} className="text-decoration-none">
+        <Link href={route('customers.show', order.customer_id)} className="text-blue-600 hover:text-blue-800 hover:underline">
           {order.customer.name}
         </Link>
       )
@@ -97,7 +97,7 @@ export default function Index({ auth, orders, filters }: DueOrdersProps) {
       label: 'ค้างชำระ',
       sortable: true,
       render: (order: Order) => (
-        <span className="text-danger">฿{(order.due / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</span>
+        <span className="text-red-600 dark:text-red-400">฿{(order.due / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</span>
       )
     },
     {
@@ -105,16 +105,16 @@ export default function Index({ auth, orders, filters }: DueOrdersProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (order: Order) => (
-        <div className="btn-list">
+        <div className="flex space-x-2">
           <Link 
             href={route('due.show', order.id)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
           >
             ดู
           </Link>
           <Link 
             href={route('due.edit', order.id)} 
-            className="btn btn-sm btn-primary"
+            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-700 dark:text-blue-100 dark:hover:bg-blue-600"
           >
             ชำระเงิน
           </Link>
@@ -187,18 +187,18 @@ export default function Index({ auth, orders, filters }: DueOrdersProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">รายการ</div>
-            <h2 className="page-title">รายการค้างชำระ</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-sm text-gray-500 dark:text-gray-400">รายการ</div>
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">รายการค้างชำระ</h1>
           </div>
         </div>
       }
     >
       <Head title="รายการค้างชำระ" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="pb-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           <DataTable

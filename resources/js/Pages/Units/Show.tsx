@@ -7,9 +7,11 @@ import DataTable from '@/Components/Table/DataTable'
 interface Product {
   id: number
   name: string
+  slug: string
   code: string
   category: {
     name: string
+    slug: string
   }
   unit_id: number
   stock: number
@@ -45,7 +47,7 @@ export default function Show({ auth, unit }: ShowProps) {
       label: 'ชื่อสินค้า',
       sortable: true,
       render: (product: Product) => (
-        <Link href={route('products.show', product.id)} className="text-decoration-none">
+        <Link href={route('products.show', product.slug || product.id)} className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
           {product.name}
         </Link>
       )
@@ -83,16 +85,16 @@ export default function Show({ auth, unit }: ShowProps) {
       field: 'actions',
       label: 'จัดการ',
       render: (product: Product) => (
-        <div className="btn-list">
+        <div className="flex items-center space-x-2">
           <Link 
-            href={route('products.show', product.id)} 
-            className="btn btn-sm"
+            href={route('products.show', product.slug || product.id)} 
+            className="inline-flex items-center px-2.5 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"
           >
             ดู
           </Link>
           <Link 
-            href={route('products.edit', product.id)} 
-            className="btn btn-sm btn-primary"
+            href={route('products.edit', product.slug || product.id)} 
+            className="inline-flex items-center px-2.5 py-1 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
           >
             แก้ไข
           </Link>
@@ -105,25 +107,29 @@ export default function Show({ auth, unit }: ShowProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="row g-2 align-items-center">
-          <div className="col">
-            <div className="page-pretitle">ข้อมูล</div>
-            <h2 className="page-title">หน่วยวัด: {unit.name}</h2>
-          </div>
-          <div className="col-auto ms-auto">
-            <div className="btn-list">
-              <Link
-                href={route('units.edit', unit.slug)}
-                className="btn btn-primary d-none d-sm-inline-block"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
-                  <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
-                  <path d="M16 5l3 3"></path>
-                </svg>
-                แก้ไขหน่วยวัด
-              </Link>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm text-gray-500 dark:text-gray-400">ข้อมูล</p>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  หน่วยวัด: {unit.name}
+                </h2>
+              </div>
+              <div>
+                <Link
+                  href={route('units.edit', unit.slug)}
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 hidden sm:inline-flex"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                    <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                    <path d="M16 5l3 3"></path>
+                  </svg>
+                  แก้ไขหน่วยวัด
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -131,106 +137,100 @@ export default function Show({ auth, unit }: ShowProps) {
     >
       <Head title={`หน่วยวัด: ${unit.name}`} />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-6">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
-          <div className="row row-cards">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">รายละเอียดหน่วยวัด</h3>
-                </div>
-                <div className="card-body">
-                  <div className="datagrid">
-                    <div className="datagrid-item">
-                      <div className="datagrid-title">ชื่อหน่วยวัด</div>
-                      <div className="datagrid-content">{unit.name}</div>
-                    </div>
-                    <div className="datagrid-item">
-                      <div className="datagrid-title">Slug</div>
-                      <div className="datagrid-content">{unit.slug}</div>
-                    </div>
-                    <div className="datagrid-item">
-                      <div className="datagrid-title">โค้ดย่อ</div>
-                      <div className="datagrid-content">{unit.short_code}</div>
-                    </div>
-                    <div className="datagrid-item">
-                      <div className="datagrid-title">จำนวนสินค้าที่ใช้หน่วยวัดนี้</div>
-                      <div className="datagrid-content">{unit.products?.length || 0} รายการ</div>
-                    </div>
-                    <div className="datagrid-item">
-                      <div className="datagrid-title">วันที่สร้าง</div>
-                      <div className="datagrid-content">
-                        {new Date(unit.created_at).toLocaleDateString('th-TH', { 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </div>
-                    </div>
-                    <div className="datagrid-item">
-                      <div className="datagrid-title">วันที่แก้ไขล่าสุด</div>
-                      <div className="datagrid-content">
-                        {new Date(unit.updated_at).toLocaleDateString('th-TH', { 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </div>
-                    </div>
+          <div className="mt-6">
+            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+              <div className="border-b border-gray-200 dark:border-gray-700 p-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">รายละเอียดหน่วยวัด</h3>
+              </div>
+              <div className="p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">ชื่อหน่วยวัด</p>
+                    <p className="text-base text-gray-900 dark:text-gray-100">{unit.name}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Slug</p>
+                    <p className="text-base text-gray-900 dark:text-gray-100">{unit.slug}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">โค้ดย่อ</p>
+                    <p className="text-base text-gray-900 dark:text-gray-100">{unit.short_code}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">จำนวนสินค้าที่ใช้หน่วยวัดนี้</p>
+                    <p className="text-base text-gray-900 dark:text-gray-100">{unit.products?.length || 0} รายการ</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">วันที่สร้าง</p>
+                    <p className="text-base text-gray-900 dark:text-gray-100">
+                      {new Date(unit.created_at).toLocaleDateString('th-TH', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">วันที่แก้ไขล่าสุด</p>
+                    <p className="text-base text-gray-900 dark:text-gray-100">
+                      {new Date(unit.updated_at).toLocaleDateString('th-TH', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="row mt-3">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">สินค้าที่ใช้หน่วยวัดนี้</h3>
-                </div>
-                <div className="card-body">
-                  {unit.products && unit.products.length > 0 ? (
-                    <DataTable
-                      data={unit.products}
-                      columns={productColumns}
-                      sortField="name"
-                      sortDirection="asc"
-                    />
-                  ) : (
-                    <div className="empty">
-                      <div className="empty-img">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-package" width="50" height="50" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                          <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline>
-                          <line x1="12" y1="12" x2="20" y2="7.5"></line>
-                          <line x1="12" y1="12" x2="12" y2="21"></line>
-                          <line x1="12" y1="12" x2="4" y2="7.5"></line>
-                        </svg>
-                      </div>
-                      <p className="empty-title">ไม่มีสินค้าที่ใช้หน่วยวัดนี้</p>
-                      <p className="empty-subtitle text-muted">
-                        คุณสามารถเพิ่มสินค้าใหม่และเลือกหน่วยวัดนี้ได้
-                      </p>
-                      <div className="empty-action">
-                        <Link href={route('products.create')} className="btn btn-primary">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                          </svg>
-                          เพิ่มสินค้าใหม่
-                        </Link>
-                      </div>
+          <div className="mt-6">
+            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+              <div className="border-b border-gray-200 dark:border-gray-700 p-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">สินค้าที่ใช้หน่วยวัดนี้</h3>
+              </div>
+              <div className="p-4">
+                {unit.products && unit.products.length > 0 ? (
+                  <DataTable
+                    data={unit.products}
+                    columns={productColumns}
+                    sortField="name"
+                    sortDirection="asc"
+                  />
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="mx-auto w-12 h-12 mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-gray-400" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline>
+                        <line x1="12" y1="12" x2="20" y2="7.5"></line>
+                        <line x1="12" y1="12" x2="12" y2="21"></line>
+                        <line x1="12" y1="12" x2="4" y2="7.5"></line>
+                      </svg>
                     </div>
-                  )}
-                </div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-1">ไม่มีสินค้าที่ใช้หน่วยวัดนี้</h3>
+                    <p className="text-gray-500 dark:text-gray-400 mb-4">
+                      คุณสามารถเพิ่มสินค้าใหม่และเลือกหน่วยวัดนี้ได้
+                    </p>
+                    <Link href={route('products.create')} className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                      เพิ่มสินค้าใหม่
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

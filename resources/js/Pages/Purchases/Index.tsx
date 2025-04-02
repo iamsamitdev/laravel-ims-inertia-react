@@ -55,7 +55,7 @@ export default function Index({ auth, purchases, filters }: PurchasesProps) {
       label: 'เลขที่อ้างอิง',
       sortable: true,
       render: (purchase: Purchase) => (
-        <Link href={route('purchases.show', purchase.id)} className="text-decoration-none">
+        <Link href={route('purchases.show', purchase.id)} className="text-blue-600 hover:text-blue-800 hover:underline">
           {purchase.reference_no}
         </Link>
       )
@@ -65,17 +65,17 @@ export default function Index({ auth, purchases, filters }: PurchasesProps) {
       label: 'ซัพพลายเออร์',
       sortable: true,
       render: (purchase: Purchase) => (
-        <Link href={route('suppliers.show', purchase.supplier_id)} className="text-decoration-none">
+        <Link href={route('suppliers.show', purchase.supplier_id)} className="text-blue-600 hover:text-blue-800 hover:underline">
           {purchase.supplier.name}
         </Link>
       )
     },
     {
-      field: 'purchase_date',
+      field: 'date',
       label: 'วันที่',
       sortable: true,
       render: (purchase: Purchase) => (
-        <span>{new Date(purchase.purchase_date).toLocaleDateString('th-TH')}</span>
+        <span>{purchase.purchase_date ? new Date(purchase.purchase_date).toLocaleDateString('th-TH') : '-'}</span>
       )
     },
     {
@@ -91,11 +91,25 @@ export default function Index({ auth, purchases, filters }: PurchasesProps) {
       label: 'สถานะการสั่งซื้อ',
       sortable: true,
       render: (purchase: Purchase) => {
-        const statusClass = purchase.purchase_status.value === 0 
-          ? 'badge bg-warning me-1' 
-          : 'badge bg-success me-1'
+        // ตรวจสอบว่ามี purchase_status ที่เป็น object และมี value หรือไม่
+        const statusValue = typeof purchase.purchase_status === 'object' && purchase.purchase_status !== null 
+          ? purchase.purchase_status.value 
+          : (typeof purchase.purchase_status === 'number' ? purchase.purchase_status : 0)
         
-        return <span className={statusClass}>{purchase.purchase_status.label}</span>
+        // ดึงค่า label จาก object หรือกำหนดค่า default ตาม value
+        const statusLabel = typeof purchase.purchase_status === 'object' && purchase.purchase_status !== null 
+          ? purchase.purchase_status.label 
+          : (statusValue === 0 ? 'รออนุมัติ' : 'อนุมัติแล้ว')
+        
+        const statusInfo = statusValue === 0 
+          ? { classes: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100', label: statusLabel }
+          : { classes: 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100', label: statusLabel }
+        
+        return (
+          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md ${statusInfo.classes}`}>
+            {statusInfo.label}
+          </span>
+        )
       }
     },
     {
@@ -103,23 +117,38 @@ export default function Index({ auth, purchases, filters }: PurchasesProps) {
       label: 'สถานะการชำระเงิน',
       sortable: true,
       render: (purchase: Purchase) => {
-        let statusClass
+        // ตรวจสอบว่ามี payment_status ที่เป็น object และมี value หรือไม่
+        const paymentStatusValue = typeof purchase.payment_status === 'object' && purchase.payment_status !== null 
+          ? purchase.payment_status.value 
+          : (typeof purchase.payment_status === 'number' ? purchase.payment_status : 0)
         
-        switch (purchase.payment_status.value) {
-          case 0: // ยังไม่ชำระ
-            statusClass = 'badge bg-danger me-1'
-            break
-          case 1: // ชำระบางส่วน
-            statusClass = 'badge bg-warning me-1'
-            break
-          case 2: // ชำระแล้ว
-            statusClass = 'badge bg-success me-1'
-            break
-          default:
-            statusClass = 'badge me-1'
+        // ดึงค่า label จาก object หรือกำหนดค่า default ตาม value
+        const paymentStatusLabel = typeof purchase.payment_status === 'object' && purchase.payment_status !== null 
+          ? purchase.payment_status.label 
+          : (paymentStatusValue === 0 ? 'ยังไม่ชำระ' : (paymentStatusValue === 1 ? 'ชำระบางส่วน' : 'ชำระแล้ว'))
+        
+        let statusInfo = {
+          classes: '',
+          label: paymentStatusLabel
         }
         
-        return <span className={statusClass}>{purchase.payment_status.label}</span>
+        switch (paymentStatusValue) {
+          case 0: // ยังไม่ชำระ
+            statusInfo.classes = 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+            break
+          case 1: // ชำระบางส่วน
+            statusInfo.classes = 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
+            break
+          case 2: // ชำระแล้ว
+            statusInfo.classes = 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+            break
+        }
+        
+        return (
+          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md ${statusInfo.classes}`}>
+            {statusInfo.label}
+          </span>
+        )
       }
     },
     {
@@ -127,24 +156,26 @@ export default function Index({ auth, purchases, filters }: PurchasesProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (purchase: Purchase) => (
-        <div className="btn-list">
+        <div className="flex space-x-2">
           <Link 
             href={route('purchases.show', purchase.id)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
           >
             ดู
           </Link>
-          {purchase.purchase_status.value === 0 && (
+          {(typeof purchase.purchase_status === 'object' && purchase.purchase_status !== null
+          ? purchase.purchase_status.value === 0
+          : (typeof purchase.purchase_status === 'number' ? purchase.purchase_status === 0 : false)) && (
             <Link 
               href={route('purchases.edit', purchase.id)} 
-              className="btn btn-sm btn-primary"
+              className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700"
             >
               แก้ไข
             </Link>
           )}
           <Link 
             href={route('purchases.print', purchase.id)} 
-            className="btn btn-sm btn-info"
+            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-cyan-600 text-white hover:bg-cyan-700"
             target="_blank"
           >
             พิมพ์
@@ -204,41 +235,31 @@ export default function Index({ auth, purchases, filters }: PurchasesProps) {
     <>
       <Link 
         href={route('purchases.create')}
-        className="btn btn-primary d-none d-sm-inline-block"
+        className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
           <path d="M12 5l0 14" />
           <path d="M5 12l14 0" />
         </svg>
         สร้างรายการสั่งซื้อใหม่
       </Link>
-      <Link 
-        href={route('purchases.create')}
-        className="btn btn-primary d-sm-none btn-icon"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
-        </svg>
-      </Link>
     </>
   )
 
   // หน้าใหม่
   const tabs = (
-    <div className="d-flex mt-2 mb-3">
-      <Link href={route('purchases.index')} className="btn active">
+    <div className="flex space-x-1 mb-4">
+      <Link href={route('purchases.index')} className="px-3 py-2 text-sm font-medium border-b-2 border-blue-500 text-blue-600">
         รายการทั้งหมด
       </Link>
-      <Link href={route('purchases.pending')} className="btn">
+      <Link href={route('purchases.pending')} className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:border-gray-300 border-b-2 border-transparent">
         รออนุมัติ
       </Link>
-      <Link href={route('purchases.complete')} className="btn">
+      <Link href={route('purchases.complete')} className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:border-gray-300 border-b-2 border-transparent">
         เสร็จสิ้น
       </Link>
-      <Link href={route('purchases.due')} className="btn">
+      <Link href={route('purchases.due')} className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:border-gray-300 border-b-2 border-transparent">
         ค้างชำระ
       </Link>
     </div>
@@ -263,18 +284,24 @@ export default function Index({ auth, purchases, filters }: PurchasesProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="row g-2 align-items-center">
-          <div className="col">
-            <div className="page-pretitle">รายการ</div>
-            <h2 className="page-title">รายการสั่งซื้อสินค้าเข้า</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between">
+              <div>
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">รายการสั่งซื้อสินค้าเข้า</h2>
+              </div>
+              <div>
+                {tableActions}
+              </div>
+            </div>
           </div>
         </div>
       }
     >
       <Head title="รายการสั่งซื้อสินค้าเข้า" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           {tabs}
@@ -290,7 +317,6 @@ export default function Index({ auth, purchases, filters }: PurchasesProps) {
             sortDirection={filters.direction}
             loading={loading}
             title="รายการสั่งซื้อสินค้าเข้า"
-            actions={tableActions}
           />
         </div>
       </div>

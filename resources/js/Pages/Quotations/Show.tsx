@@ -130,7 +130,7 @@ export default function Show({ auth, quotation }: ShowProps) {
     >
       <Head title={`ใบเสนอราคา #${quotation.reference}`} />
       
-      <div className="py-12">
+      <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           

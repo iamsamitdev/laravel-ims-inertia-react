@@ -25,6 +25,7 @@
         "vite-plugin-static-copy": "^2.2.0"
     },
     "dependencies": {
+        "react-icons": "^5.5.0",
         "ziggy-js": "^2.5.2"
     }
 }

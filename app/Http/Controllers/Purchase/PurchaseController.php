@@ -24,7 +24,7 @@ class PurchaseController extends Controller
     {
         $search = $request->input('search', '');
         $perPage = $request->input('perPage', 10);
-        $field = $request->input('field', 'purchase_date');
+        $field = $request->input('field', 'date');
         $direction = $request->input('direction', 'desc');
         
         $purchases = Purchase::with(['supplier'])
@@ -55,7 +55,7 @@ class PurchaseController extends Controller
     {
         $search = $request->input('search', '');
         $perPage = $request->input('perPage', 10);
-        $field = $request->input('field', 'purchase_date');
+        $field = $request->input('field', 'date');
         $direction = $request->input('direction', 'desc');
         
         $purchases = Purchase::with(['supplier'])
@@ -73,6 +73,106 @@ class PurchaseController extends Controller
             ->withQueryString();
 
         return Inertia::render('Purchases/Approved', [
+            'purchases' => $purchases,
+            'filters' => [
+                'search' => $search,
+                'perPage' => (int)$perPage,
+                'field' => $field,
+                'direction' => $direction,
+            ],
+        ]);
+    }
+
+    public function pendingPurchases(Request $request)
+    {
+        $search = $request->input('search', '');
+        $perPage = $request->input('perPage', 10);
+        $field = $request->input('field', 'date');
+        $direction = $request->input('direction', 'desc');
+        
+        $purchases = Purchase::with(['supplier'])
+            ->where('status', PurchaseStatus::PENDING)
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($query) use ($search) {
+                    $query->where('reference_no', 'like', "%{$search}%")
+                        ->orWhereHas('supplier', function ($q) use ($search) {
+                            $q->where('name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->orderBy($field, $direction)
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return Inertia::render('Purchases/Index', [
+            'purchases' => $purchases,
+            'filters' => [
+                'search' => $search,
+                'perPage' => (int)$perPage,
+                'field' => $field,
+                'direction' => $direction,
+            ],
+        ]);
+    }
+    
+    public function completePurchases(Request $request)
+    {
+        $search = $request->input('search', '');
+        $perPage = $request->input('perPage', 10);
+        $field = $request->input('field', 'date');
+        $direction = $request->input('direction', 'desc');
+        
+        $purchases = Purchase::with(['supplier'])
+            ->where('status', PurchaseStatus::APPROVED)
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($query) use ($search) {
+                    $query->where('reference_no', 'like', "%{$search}%")
+                        ->orWhereHas('supplier', function ($q) use ($search) {
+                            $q->where('name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->orderBy($field, $direction)
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return Inertia::render('Purchases/Index', [
+            'purchases' => $purchases,
+            'filters' => [
+                'search' => $search,
+                'perPage' => (int)$perPage,
+                'field' => $field,
+                'direction' => $direction,
+            ],
+        ]);
+    }
+    
+    public function duePurchases(Request $request)
+    {
+        $search = $request->input('search', '');
+        $perPage = $request->input('perPage', 10);
+        $field = $request->input('field', 'date');
+        $direction = $request->input('direction', 'desc');
+        
+        // ตรงนี้ควรจะมีการกรองเฉพาะรายการที่ค้างชำระ
+        // อาจจะต้องตรวจสอบจากฟิลด์ payment_status หรือตามโครงสร้างข้อมูลที่มี
+        $purchases = Purchase::with(['supplier'])
+            ->where('status', PurchaseStatus::APPROVED)
+            // ถ้ามีฟิลด์สถานะการชำระเงิน ให้เพิ่มเงื่อนไขตรงนี้
+            // ->where('payment_status', PaymentStatus::UNPAID)
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($query) use ($search) {
+                    $query->where('reference_no', 'like', "%{$search}%")
+                        ->orWhereHas('supplier', function ($q) use ($search) {
+                            $q->where('name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->orderBy($field, $direction)
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return Inertia::render('Purchases/Index', [
             'purchases' => $purchases,
             'filters' => [
                 'search' => $search,
@@ -166,11 +266,11 @@ class PurchaseController extends Controller
     {
         $search = $request->input('search', '');
         $perPage = $request->input('perPage', 10);
-        $field = $request->input('field', 'purchase_date');
+        $field = $request->input('field', 'date');
         $direction = $request->input('direction', 'desc');
         
         $purchases = Purchase::with(['supplier'])
-            ->where('purchase_date', today()->format('Y-m-d'))
+            ->where('date', today()->format('Y-m-d'))
             ->when($search, function ($query, $search) {
                 return $query->where(function ($query) use ($search) {
                     $query->where('reference_no', 'like', "%{$search}%")
@@ -196,7 +296,11 @@ class PurchaseController extends Controller
 
     public function getPurchaseReport()
     {
-        return Inertia::render('Purchases/Report');
+        $suppliers = \App\Models\Supplier::orderBy('name')->get();
+        
+        return Inertia::render('Purchases/Report', [
+            'suppliers' => $suppliers
+        ]);
     }
 
     public function exportPurchaseReport(Request $request)
@@ -215,9 +319,9 @@ class PurchaseController extends Controller
             ->join('products', 'purchase_details.product_id', '=', 'products.id')
             ->join('purchases', 'purchase_details.purchase_id', '=', 'purchases.id')
             ->join('users', 'users.id', '=', 'purchases.created_by')
-            ->whereBetween('purchases.purchase_date', [$sDate, $eDate])
+            ->whereBetween('purchases.date', [$sDate, $eDate])
             ->where('purchases.purchase_status', '1')
-            ->select('purchases.purchase_no', 'purchases.purchase_date', 'purchases.supplier_id', 'products.code', 'products.name', 'purchase_details.quantity', 'purchase_details.unitcost', 'purchase_details.total', 'users.name as created_by')
+            ->select('purchases.purchase_no', 'purchases.date', 'purchases.supplier_id', 'products.code', 'products.name', 'purchase_details.quantity', 'purchase_details.unitcost', 'purchase_details.total', 'users.name as created_by')
             ->get();
 
         // dd($purchases);
@@ -236,7 +340,7 @@ class PurchaseController extends Controller
 
         foreach ($purchases as $purchase) {
             $purchase_array[] = [
-                'Date' => $purchase->purchase_date,
+                'Date' => $purchase->date,
                 'No Purchase' => $purchase->purchase_no,
                 'Supplier' => $purchase->supplier_id,
                 'Product Code' => $purchase->product_code,
@@ -272,5 +376,24 @@ class PurchaseController extends Controller
         } catch (Exception $e) {
             return $e;
         }
+    }
+
+    public function printPurchase(Purchase $purchase)
+    {
+        $purchase->load(['supplier', 'details.product']);
+
+        // เพิ่มข้อมูลบริษัทสำหรับการพิมพ์
+        $company = [
+            'name' => config('app.name', 'Laravel'),
+            'email' => 'info@example.com',
+            'phone' => '0812345678',
+            'address' => '123 ถนนสุขุมวิท กรุงเทพฯ 10110',
+            'logo' => asset('images/logo.png'),
+        ];
+
+        return Inertia::render('Purchases/Print', [
+            'purchase' => $purchase,
+            'company' => $company
+        ]);
     }
 }

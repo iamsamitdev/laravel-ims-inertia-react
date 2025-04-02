@@ -3,6 +3,7 @@ import { Head, useForm, Link } from '@inertiajs/react'
 import { PageProps } from '@/types'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Breadcrumbs from '@/Components/Breadcrumbs'
+import InputError from '@/Components/InputError'
 
 interface Category {
   id: number
@@ -43,7 +44,7 @@ export default function Edit({ auth, category }: EditProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    put(route('categories.update', category.id))
+    put(route('categories.update', category.slug))
   }
 
   const breadcrumbsItems = [
@@ -56,67 +57,76 @@ export default function Edit({ auth, category }: EditProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">แก้ไข</div>
-            <h2 className="page-title">หมวดหมู่: {category.name}</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400">แก้ไข</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                หมวดหมู่: {category.name}
+              </h2>
+            </div>
           </div>
         </div>
       }
     >
       <Head title={`แก้ไขหมวดหมู่ - ${category.name}`} />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-6">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
-          <div className="row justify-content-center">
-            <div className="col-12 col-md-8">
+          <div className="flex justify-center">
+            <div className="w-full">
               <form onSubmit={handleSubmit}>
-                <div className="card">
-                  <div className="card-header">
-                    <h3 className="card-title">แก้ไขรายละเอียดหมวดหมู่</h3>
+                <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                  <div className="border-b border-gray-200 dark:border-gray-700 p-4">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">แก้ไขรายละเอียดหมวดหมู่</h3>
                   </div>
-                  <div className="card-body">
-                    <div className="mb-3">
-                      <label className="form-label required">ชื่อหมวดหมู่</label>
+                  <div className="p-4 space-y-4">
+                    <div>
+                      <label className="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1" htmlFor="name">
+                        ชื่อหมวดหมู่ <span className="text-red-500">*</span>
+                      </label>
                       <input 
+                        id="name"
                         type="text" 
-                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                        className="mt-1 p-2 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                         value={data.name}
                         onChange={handleNameChange}
                         placeholder="ป้อนชื่อหมวดหมู่" 
                       />
-                      {errors.name && (
-                        <div className="invalid-feedback">
-                          {errors.name}
-                        </div>
-                      )}
+                      <InputError message={errors.name} className="mt-2" />
                     </div>
 
-                    <div className="mb-3">
-                      <label className="form-label required">Slug</label>
+                    <div>
+                      <label className="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1" htmlFor="slug">
+                        Slug <span className="text-red-500">*</span>
+                      </label>
                       <input 
+                        id="slug"
                         type="text" 
-                        className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
+                        className="mt-1 p-2 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                         value={data.slug}
                         onChange={handleSlugChange}
                         placeholder="ป้อน slug" 
                       />
-                      {errors.slug && (
-                        <div className="invalid-feedback">
-                          {errors.slug}
-                        </div>
-                      )}
+                      <InputError message={errors.slug} className="mt-2" />
                     </div>
                   </div>
-                  <div className="card-footer text-end">
-                    <div className="d-flex">
-                      <Link href={route('categories.index')} className="btn btn-link">ยกเลิก</Link>
-                      <button type="submit" className="btn btn-primary ms-auto" disabled={processing}>
-                        {processing ? 'กำลังบันทึก...' : 'บันทึกข้อมูล'}
-                      </button>
-                    </div>
+                  <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 flex items-center justify-end space-x-3 border-t border-gray-200 dark:border-gray-700">
+                    <Link 
+                      href={route('categories.index')} 
+                      className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"
+                    >
+                      ยกเลิก
+                    </Link>
+                    <button 
+                      type="submit" 
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150" 
+                      disabled={processing}
+                    >
+                      {processing ? 'กำลังบันทึก...' : 'บันทึกข้อมูล'}
+                    </button>
                   </div>
                 </div>
               </form>

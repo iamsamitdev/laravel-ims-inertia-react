@@ -121,7 +121,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('term') ?? $request->input('search') ?? '';
         
         $products = Product::where('name', 'like', "%{$search}%")
             ->orWhere('code', 'like', "%{$search}%")
@@ -141,6 +141,12 @@ class ProductController extends Controller
                 ];
             });
         
+        // ถ้าเรียกผ่าน API route หรือมีการร้องขอ JSON ให้คืนค่าเป็น JSON ตรง ๆ
+        if ($request->is('api/*') || $request->expectsJson() || $request->ajax()) {
+            return $products;
+        }
+        
+        // ถ้าเรียกผ่าน Web route ให้ render หน้า Inertia
         return Inertia::render('Purchases/Edit', [
             'products' => $products,
         ]);

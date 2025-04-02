@@ -57,7 +57,7 @@ export default function Index({ auth, orders, filters }: OrdersProps) {
       label: 'เลขที่ใบสั่งซื้อ',
       sortable: true,
       render: (order: Order) => (
-        <Link href={route('orders.show', order.id)} className="text-decoration-none">
+        <Link href={route('orders.show', order.id)} className="text-blue-600 hover:text-blue-800 hover:underline">
           {order.invoice_no}
         </Link>
       )
@@ -67,7 +67,7 @@ export default function Index({ auth, orders, filters }: OrdersProps) {
       label: 'ลูกค้า',
       sortable: true,
       render: (order: Order) => (
-        <Link href={route('customers.show', order.customer_id)} className="text-decoration-none">
+        <Link href={route('customers.show', order.customer_id)} className="text-blue-600 hover:text-blue-800 hover:underline">
           {order.customer.name}
         </Link>
       )
@@ -98,11 +98,44 @@ export default function Index({ auth, orders, filters }: OrdersProps) {
       label: 'สถานะ',
       sortable: true,
       render: (order: Order) => {
-        const statusClass = order.order_status.value === 0 
-          ? 'badge bg-warning me-1' 
-          : 'badge bg-success me-1'
+        // ตรวจสอบว่า order_status มาในรูปแบบไหน
+        const orderStatusValue = typeof order.order_status === 'object' 
+          ? order.order_status.value 
+          : order.order_status;
         
-        return <span className={statusClass}>{order.order_status.label}</span>
+        // กำหนดข้อความและสีตามค่าสถานะ
+        let statusInfo = {
+          classes: '',
+          label: ''
+        };
+        
+        if (orderStatusValue === 0) {
+          statusInfo = {
+            classes: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100',
+            label: 'รออนุมัติ'
+          };
+        } else if (orderStatusValue === 1) {
+          statusInfo = {
+            classes: 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100',
+            label: 'เสร็จสิ้น'
+          };
+        } else if (orderStatusValue === 2) {
+          statusInfo = {
+            classes: 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100',
+            label: 'ยกเลิก'
+          };
+        }
+        
+        // ใช้ label จาก API ถ้ามี 
+        if (typeof order.order_status === 'object' && order.order_status.label) {
+          statusInfo.label = order.order_status.label;
+        }
+        
+        return (
+          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md ${statusInfo.classes}`}>
+            {statusInfo.label}
+          </span>
+        );
       }
     },
     {
@@ -110,24 +143,16 @@ export default function Index({ auth, orders, filters }: OrdersProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (order: Order) => (
-        <div className="btn-list">
+        <div className="flex space-x-2">
           <Link 
             href={route('orders.show', order.id)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
           >
             ดู
           </Link>
-          {order.order_status.value === 0 && (
-            <Link 
-              href={route('orders.edit', order.id)} 
-              className="btn btn-sm btn-primary"
-            >
-              แก้ไข
-            </Link>
-          )}
           <Link 
             href={route('orders.invoice.download', order.id)} 
-            className="btn btn-sm btn-info"
+            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-700 dark:text-indigo-100 dark:hover:bg-indigo-600"
             target="_blank"
           >
             พิมพ์
@@ -264,7 +289,7 @@ export default function Index({ auth, orders, filters }: OrdersProps) {
     >
       <Head title="รายการสั่งซื้อ" />
       
-      <div className="py-12">
+      <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\ProductController;
+use App\Http\Controllers\Product\ProductController as WebProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('products/', [ProductController::class, 'index'])->name('api.product.index');
+
+// เพิ่ม route สำหรับค้นหาสินค้า
+Route::get('search/products', [WebProductController::class, 'search'])->name('api.search.products');

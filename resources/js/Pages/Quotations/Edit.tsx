@@ -258,15 +258,17 @@ export default function Edit({ auth, quotation, customers, products }: EditProps
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="flex flex-col space-y-1">
-          <div className="text-sm text-gray-500 dark:text-gray-400">แก้ไข</div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">ใบเสนอราคา #{quotation.reference}</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-sm text-gray-500 dark:text-gray-400">แก้ไข</div>
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">ใบเสนอราคา #{quotation.reference}</h2>
+          </div>
         </div>
       }
     >
       <Head title={`แก้ไขใบเสนอราคา #${quotation.reference}`} />
       
-      <div className="py-6">
+      <div className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
@@ -275,7 +277,7 @@ export default function Edit({ auth, quotation, customers, products }: EditProps
               <div className="lg:col-span-2">
                 <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden mb-6">
                   <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">รายการสินค้า</h3>
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">รายการสินค้า</h3>
                   </div>
                   <div className="p-4">
                     <div className="mb-4">
@@ -302,11 +304,11 @@ export default function Edit({ auth, quotation, customers, products }: EditProps
                                 >
                                   <div className="flex justify-between items-center">
                                     <div>
-                                      <div className="font-medium text-gray-800 dark:text-white">{product.name}</div>
+                                      <div className="font-medium text-gray-800 dark:text-gray-100">{product.name}</div>
                                       <div className="text-sm text-gray-500 dark:text-gray-400">รหัส: {product.code}</div>
                                     </div>
                                     <div className="text-right">
-                                      <div className="text-gray-800 dark:text-white">฿{(product.price / 100).toLocaleString('th-TH')}</div>
+                                      <div className="text-gray-800 dark:text-gray-100">฿{(product.price / 100).toLocaleString('th-TH')}</div>
                                       <div className="text-sm text-gray-500 dark:text-gray-400">คงเหลือ: {product.stock}</div>
                                     </div>
                                   </div>
@@ -391,7 +393,7 @@ export default function Edit({ auth, quotation, customers, products }: EditProps
               <div className="space-y-6">
                 <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
                   <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">ข้อมูลใบเสนอราคา</h3>
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">ข้อมูลใบเสนอราคา</h3>
                   </div>
                   <div className="p-4">
                     <div className="mb-4">
@@ -468,7 +470,7 @@ export default function Edit({ auth, quotation, customers, products }: EditProps
                 
                 <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
                   <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">ส่วนลดและภาษี</h3>
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">ส่วนลดและภาษี</h3>
                   </div>
                   <div className="p-4">
                     <div className="mb-4">
@@ -532,8 +534,8 @@ export default function Edit({ auth, quotation, customers, products }: EditProps
                       </div>
                       <div className="border-t border-gray-200 dark:border-gray-700 my-2 pt-2">
                         <div className="flex justify-between font-medium">
-                          <span className="text-gray-800 dark:text-white">ยอดรวมสุทธิ:</span>
-                          <span className="text-gray-800 dark:text-white">฿{(grandTotal / 100).toLocaleString('th-TH')}</span>
+                          <span className="text-gray-800 dark:text-gray-100">ยอดรวมสุทธิ:</span>
+                          <span className="text-gray-800 dark:text-gray-100">฿{(grandTotal / 100).toLocaleString('th-TH')}</span>
                         </div>
                       </div>
                     </div>
@@ -542,7 +544,7 @@ export default function Edit({ auth, quotation, customers, products }: EditProps
                 
                 <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
                   <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">หมายเหตุและเงื่อนไข</h3>
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">หมายเหตุและเงื่อนไข</h3>
                   </div>
                   <div className="p-4">
                     <div className="mb-4">
@@ -574,13 +576,13 @@ export default function Edit({ auth, quotation, customers, products }: EditProps
                 <div className="flex justify-between">
                   <Link 
                     href={route('quotations.show', quotation.id)} 
-                    className="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 text-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
+                    className="inline-flex justify-center items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
                   >
                     ยกเลิก
                   </Link>
                   <button 
                     type="submit" 
-                    className="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-white text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-700 dark:hover:bg-blue-600" 
+                    className="inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 disabled:opacity-25" 
                     disabled={processing || loading}
                   >
                     {processing || loading ? 'กำลังบันทึก...' : 'บันทึก'}

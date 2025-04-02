@@ -13,51 +13,48 @@ interface Product {
   unit?: string
 }
 
-interface PurchaseItem {
+interface OrderDetail {
   id?: number
+  order_id?: number
   product_id?: number
   quantity: number
-  unit_price: number
-  total_price: number
+  unitcost: number
+  total: number
   product?: Product
 }
 
-interface Supplier {
+interface Customer {
   id?: number
   name?: string
   email?: string
   phone?: string
   address?: string
-  shop_name?: string
 }
 
-interface Purchase {
+interface Order {
   id: number
-  reference_no?: string
-  supplier_id?: number
-  purchase_date?: string
-  total_amount?: number
-  paid_amount?: number
-  due_amount?: number
-  subtotal?: number
+  invoice_no?: string
+  customer_id?: number
+  order_date?: string
+  order_status?: {
+    value?: number
+    label?: string
+  } | number
+  total_products?: number
+  sub_total?: number
   vat?: number
-  purchase_status?: {
-    value?: number
-    label?: string
-  } | number
-  payment_status?: {
-    value?: number
-    label?: string
-  } | number
-  purchase_note?: string
+  total?: number
+  payment_type?: string
+  pay?: number
+  due?: number
   created_at?: string
   updated_at?: string
-  supplier?: Supplier
-  purchase_items?: PurchaseItem[]
+  customer?: Customer
+  details?: OrderDetail[]
 }
 
 interface PrintProps extends PageProps {
-  purchase: Purchase
+  order: Order
   company: {
     name: string
     email: string
@@ -67,7 +64,7 @@ interface PrintProps extends PageProps {
   }
 }
 
-export default function Print({ purchase, company }: PrintProps) {
+export default function Print({ order, company }: PrintProps) {
   const printRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -78,7 +75,7 @@ export default function Print({ purchase, company }: PrintProps) {
 
   return (
     <>
-      <Head title={`พิมพ์ใบสั่งซื้อ #${purchase.reference_no || 'ใหม่'}`} />
+      <Head title={`พิมพ์ใบสั่งซื้อ #${order.invoice_no || 'ใหม่'}`} />
       
       <div className="print:hidden p-4 text-right">
         <button 
@@ -100,11 +97,11 @@ export default function Print({ purchase, company }: PrintProps) {
           <div className="p-6">
             <div className="flex justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-semibold mb-1">ใบสั่งซื้อ #{purchase.reference_no || 'ใหม่'}</h2>
+                <h2 className="text-2xl font-semibold mb-1">ใบสั่งซื้อ #{order.invoice_no || 'ใหม่'}</h2>
                 <div className="text-gray-700 dark:text-gray-300">
                   <div className="text-xl font-semibold mb-2">ใบสั่งซื้อ</div>
-                  <div className="text-gray-500 dark:text-gray-400">เลขที่: {purchase.reference_no || '-'}</div>
-                  <div className="text-gray-500 dark:text-gray-400">วันที่: {purchase.purchase_date ? new Date(purchase.purchase_date).toLocaleDateString('th-TH') : '-'}</div>
+                  <div className="text-gray-500 dark:text-gray-400">เลขที่: {order.invoice_no || '-'}</div>
+                  <div className="text-gray-500 dark:text-gray-400">วันที่: {order.order_date ? new Date(order.order_date).toLocaleDateString('th-TH') : '-'}</div>
                 </div>
               </div>
               <div className="text-right">
@@ -124,19 +121,16 @@ export default function Print({ purchase, company }: PrintProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <h3 className="text-lg font-semibold mb-2">ข้อมูลซัพพลายเออร์</h3>
-                {purchase.supplier ? (
+                <h3 className="text-lg font-semibold mb-2">ข้อมูลลูกค้า</h3>
+                {order.customer ? (
                   <>
-                    <div className="mb-1">{purchase.supplier.name}</div>
-                    {purchase.supplier.shop_name && (
-                      <div className="mb-1">{purchase.supplier.shop_name}</div>
-                    )}
-                    <div className="mb-1">{purchase.supplier.address}</div>
-                    <div className="mb-1">โทร: {purchase.supplier.phone}</div>
-                    <div className="mb-1">อีเมล: {purchase.supplier.email}</div>
+                    <div className="mb-1">{order.customer.name}</div>
+                    <div className="mb-1">{order.customer.address}</div>
+                    <div className="mb-1">โทร: {order.customer.phone}</div>
+                    <div className="mb-1">อีเมล: {order.customer.email}</div>
                   </>
                 ) : (
-                  <div className="mb-1">ไม่มีข้อมูลซัพพลายเออร์</div>
+                  <div className="mb-1">ไม่มีข้อมูลลูกค้า</div>
                 )}
               </div>
               <div className="text-right">
@@ -144,34 +138,24 @@ export default function Print({ purchase, company }: PrintProps) {
                 <div className="mb-1">
                   <span className="font-medium">สถานะการสั่งซื้อ:</span>{' '}
                   {(() => {
-                    // ตรวจสอบว่ามี purchase_status ที่เป็น object และมี value หรือไม่
-                    const statusValue = typeof purchase.purchase_status === 'object' && purchase.purchase_status !== null 
-                      ? purchase.purchase_status.value 
-                      : (typeof purchase.purchase_status === 'number' ? purchase.purchase_status : 0)
+                    // ตรวจสอบว่ามี order_status ที่เป็น object และมี value หรือไม่
+                    const statusValue = typeof order.order_status === 'object' && order.order_status !== null 
+                      ? order.order_status.value 
+                      : (typeof order.order_status === 'number' ? order.order_status : 0)
                     
                     // ดึงค่า label จาก object หรือกำหนดค่า default ตาม value
-                    return typeof purchase.purchase_status === 'object' && purchase.purchase_status !== null && purchase.purchase_status.label
-                      ? purchase.purchase_status.label
-                      : (statusValue === 0 ? 'รออนุมัติ' : 'อนุมัติแล้ว')
+                    return typeof order.order_status === 'object' && order.order_status !== null && order.order_status.label
+                      ? order.order_status.label
+                      : (statusValue === 0 ? 'รออนุมัติ' : (statusValue === 1 ? 'เสร็จสิ้น' : 'ยกเลิก'))
                   })()}
                 </div>
                 <div className="mb-1">
-                  <span className="font-medium">สถานะการชำระเงิน:</span>{' '}
-                  {(() => {
-                    // ตรวจสอบว่ามี payment_status ที่เป็น object และมี value หรือไม่
-                    const paymentStatusValue = typeof purchase.payment_status === 'object' && purchase.payment_status !== null 
-                      ? purchase.payment_status.value 
-                      : (typeof purchase.payment_status === 'number' ? purchase.payment_status : 0)
-                    
-                    // ดึงค่า label จาก object หรือกำหนดค่า default ตาม value
-                    return typeof purchase.payment_status === 'object' && purchase.payment_status !== null && purchase.payment_status.label
-                      ? purchase.payment_status.label
-                      : (paymentStatusValue === 0 ? 'ยังไม่ชำระ' : (paymentStatusValue === 1 ? 'ชำระบางส่วน' : 'ชำระแล้ว'))
-                  })()}
+                  <span className="font-medium">วิธีการชำระเงิน:</span>{' '}
+                  {order.payment_type || '-'}
                 </div>
                 <div className="mb-1">
                   <span className="font-medium">วันที่สร้าง:</span>{' '}
-                  {purchase.created_at ? new Date(purchase.created_at).toLocaleDateString('th-TH') : '-'}
+                  {order.created_at ? new Date(order.created_at).toLocaleDateString('th-TH') : '-'}
                 </div>
               </div>
             </div>
@@ -189,25 +173,21 @@ export default function Print({ purchase, company }: PrintProps) {
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {purchase.purchase_items && purchase.purchase_items.length > 0 ? purchase.purchase_items.map((item, index) => (
-                    <tr key={item.id || index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  {order.details && order.details.length > 0 ? order.details.map((detail, index) => (
+                    <tr key={detail.id || index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-gray-100">{index + 1}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{item.product?.code || '-'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{detail.product?.code || '-'}</td>
                       <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                        {item.product?.name || '-'}
-                        <br />
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          หมวดหมู่: {item.product?.category?.name || '-'}
-                        </span>
+                        {detail.product?.name || '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-gray-100">
-                        {item.quantity} {item.product?.unit || '-'}
+                        {detail.quantity} {detail.product?.unit || '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900 dark:text-gray-100">
-                        ฿{typeof item.unit_price === 'number' ? (item.unit_price / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
+                        ฿{typeof detail.unitcost === 'number' ? (detail.unitcost / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900 dark:text-gray-100">
-                        ฿{typeof item.total_price === 'number' ? (item.total_price / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
+                        ฿{typeof detail.total === 'number' ? (detail.total / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
                       </td>
                     </tr>
                   )) : (
@@ -220,43 +200,36 @@ export default function Print({ purchase, company }: PrintProps) {
                   <tr>
                     <th colSpan={5} className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">ยอดรวมก่อนภาษี</th>
                     <th className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">
-                      ฿{typeof purchase.subtotal === 'number' ? (purchase.subtotal / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
+                      ฿{typeof order.sub_total === 'number' ? (order.sub_total / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
                     </th>
                   </tr>
                   <tr>
                     <th colSpan={5} className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">ภาษีมูลค่าเพิ่ม (7%)</th>
                     <th className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">
-                      ฿{typeof purchase.vat === 'number' ? (purchase.vat / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
+                      ฿{typeof order.vat === 'number' ? (order.vat / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
                     </th>
                   </tr>
                   <tr>
                     <th colSpan={5} className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">ยอดรวมทั้งสิ้น</th>
                     <th className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">
-                      ฿{typeof purchase.total_amount === 'number' ? (purchase.total_amount / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
+                      ฿{typeof order.total === 'number' ? (order.total / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
                     </th>
                   </tr>
                   <tr>
                     <th colSpan={5} className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">ชำระแล้ว</th>
                     <th className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">
-                      ฿{typeof purchase.paid_amount === 'number' ? (purchase.paid_amount / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
+                      ฿{typeof order.pay === 'number' ? (order.pay / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
                     </th>
                   </tr>
                   <tr>
                     <th colSpan={5} className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">ยอดค้างชำระ</th>
                     <th className="px-6 py-3 text-right text-sm font-medium text-gray-900 dark:text-gray-100">
-                      ฿{typeof purchase.due_amount === 'number' ? (purchase.due_amount / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
+                      ฿{typeof order.due === 'number' ? (order.due / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 }) : '0.00'}
                     </th>
                   </tr>
                 </tfoot>
               </table>
             </div>
-
-            {purchase.purchase_note && (
-              <div className="mt-6">
-                <h4 className="text-lg font-semibold">หมายเหตุ</h4>
-                <p className="text-gray-700 dark:text-gray-300">{purchase.purchase_note}</p>
-              </div>
-            )}
 
             <div className="grid grid-cols-3 gap-4 mt-8">
               <div className="text-center">
@@ -266,18 +239,18 @@ export default function Print({ purchase, company }: PrintProps) {
                 <div className="border-t border-gray-300 dark:border-gray-600 pt-2">ลงชื่อผู้อนุมัติ</div>
               </div>
               <div className="text-center">
-                <div className="border-t border-gray-300 dark:border-gray-600 pt-2">ลงชื่อซัพพลายเออร์</div>
+                <div className="border-t border-gray-300 dark:border-gray-600 pt-2">ลงชื่อลูกค้า</div>
               </div>
             </div>
 
             <div className="flex flex-col space-y-2">
               <div className="flex justify-between">
                 <span className="font-medium">เลขที่อ้างอิง:</span>
-                <span>{purchase.reference_no || '-'}</span>
+                <span>{order.invoice_no || '-'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">วันที่สั่งซื้อ:</span>
-                <span>{purchase.purchase_date ? new Date(purchase.purchase_date).toLocaleDateString('th-TH') : '-'}</span>
+                <span>{order.order_date ? new Date(order.order_date).toLocaleDateString('th-TH') : '-'}</span>
               </div>
             </div>
           </div>

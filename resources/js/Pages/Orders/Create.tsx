@@ -221,7 +221,7 @@ export default function Create({ auth, customers, products }: CreateProps) {
     >
       <Head title="เพิ่มคำสั่งซื้อใหม่" />
 
-      <div className="py-12">
+      <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 

@@ -99,7 +99,7 @@ export default function Header({ user, darkMode, setDarkMode }: HeaderProps) {
               </button>
 
               {userDropdownOpen && (
-                <div className="absolute right-0 z-10 w-48 py-1 mt-1 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="absolute right-0 z-10 w-48 py-1 mt-1 bg-white dark:bg-gray-800 rounded-md shadow-lg">
                   <Link
                     href={route('profile.edit')}
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"

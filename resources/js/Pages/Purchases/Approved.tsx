@@ -57,7 +57,10 @@ export default function Approved({ auth, purchases, filters }: ApprovedProps) {
       label: 'เลขที่อ้างอิง',
       sortable: true,
       render: (purchase: Purchase) => (
-        <Link href={route('purchases.show', purchase.id)} className="text-decoration-none">
+        <Link 
+          href={route('purchases.show', purchase.id)} 
+          className="text-blue-600 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
+        >
           {purchase.reference_no}
         </Link>
       )
@@ -67,17 +70,20 @@ export default function Approved({ auth, purchases, filters }: ApprovedProps) {
       label: 'ซัพพลายเออร์',
       sortable: true,
       render: (purchase: Purchase) => (
-        <Link href={route('suppliers.show', purchase.supplier_id)} className="text-decoration-none">
+        <Link 
+          href={route('suppliers.show', purchase.supplier_id)} 
+          className="text-blue-600 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
+        >
           {purchase.supplier.name}
         </Link>
       )
     },
     {
-      field: 'purchase_date',
+      field: 'date',
       label: 'วันที่',
       sortable: true,
       render: (purchase: Purchase) => (
-        <span>{new Date(purchase.purchase_date).toLocaleDateString('th-TH')}</span>
+        <span>{purchase.purchase_date ? new Date(purchase.purchase_date).toLocaleDateString('th-TH') : '-'}</span>
       )
     },
     {
@@ -94,22 +100,48 @@ export default function Approved({ auth, purchases, filters }: ApprovedProps) {
       sortable: true,
       render: (purchase: Purchase) => {
         let statusClass
-        
-        switch (purchase.payment_status.value) {
-          case 0: // ยังไม่ชำระ
-            statusClass = 'badge bg-danger me-1'
-            break
-          case 1: // ชำระบางส่วน
-            statusClass = 'badge bg-warning me-1'
-            break
-          case 2: // ชำระแล้ว
-            statusClass = 'badge bg-success me-1'
-            break
-          default:
-            statusClass = 'badge me-1'
+        let statusValue
+        let statusLabel
+
+        // ตรวจสอบว่า payment_status เป็น object ที่มี value และ label หรือเป็นเพียงค่าตัวเลข
+        if (typeof purchase.payment_status === 'object' && purchase.payment_status !== null) {
+          statusValue = purchase.payment_status.value
+          statusLabel = purchase.payment_status.label
+        } else {
+          // ถ้าเป็นตัวเลขโดยตรง
+          statusValue = purchase.payment_status
+          
+          // กำหนดค่า label ตามสถานะ
+          switch (statusValue) {
+            case 0:
+              statusLabel = 'ยังไม่ชำระ'
+              break
+            case 1:
+              statusLabel = 'ชำระบางส่วน'
+              break
+            case 2:
+              statusLabel = 'ชำระแล้ว'
+              break
+            default:
+              statusLabel = 'ไม่ทราบสถานะ'
+          }
         }
         
-        return <span className={statusClass}>{purchase.payment_status.label}</span>
+        switch (statusValue) {
+          case 0: // ยังไม่ชำระ
+            statusClass = 'inline-flex px-2 py-1 text-xs font-medium rounded-md bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+            break
+          case 1: // ชำระบางส่วน
+            statusClass = 'inline-flex px-2 py-1 text-xs font-medium rounded-md bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
+            break
+          case 2: // ชำระแล้ว
+            statusClass = 'inline-flex px-2 py-1 text-xs font-medium rounded-md bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+            break
+          default:
+            statusClass = 'inline-flex px-2 py-1 text-xs font-medium rounded-md bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100'
+        }
+        
+        return <span className={statusClass}>{statusLabel}</span>
       }
     },
     {
@@ -117,16 +149,16 @@ export default function Approved({ auth, purchases, filters }: ApprovedProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (purchase: Purchase) => (
-        <div className="btn-list">
+        <div className="flex space-x-2">
           <Link 
             href={route('purchases.show', purchase.id)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
           >
             ดู
           </Link>
           <Link 
             href={route('purchases.print', purchase.id)} 
-            className="btn btn-sm btn-info"
+            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-cyan-600 text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
             target="_blank"
           >
             พิมพ์
@@ -183,14 +215,23 @@ export default function Approved({ auth, purchases, filters }: ApprovedProps) {
 
   // หน้าใหม่
   const tabs = (
-    <div className="d-flex mt-2 mb-3">
-      <Link href={route('purchases.index')} className="btn">
+    <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+      <Link 
+        href={route('purchases.index')} 
+        className="py-4 px-6 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 border-b-2 border-transparent"
+      >
         รายการทั้งหมด
       </Link>
-      <Link href={route('purchases.approvedPurchases')} className="btn active">
+      <Link 
+        href={route('purchases.approvedPurchases')} 
+        className="py-4 px-6 text-sm font-medium text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
+      >
         รายการที่อนุมัติแล้ว
       </Link>
-      <Link href={route('purchases.dailyPurchaseReport')} className="btn">
+      <Link 
+        href={route('purchases.dailyPurchaseReport')} 
+        className="py-4 px-6 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 border-b-2 border-transparent"
+      >
         รายงานประจำวัน
       </Link>
     </div>
@@ -216,34 +257,36 @@ export default function Approved({ auth, purchases, filters }: ApprovedProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">ระบบจัดการ</div>
-            <h2 className="page-title">รายการสั่งซื้อที่อนุมัติแล้ว</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-sm text-gray-500 dark:text-gray-400">ระบบจัดการ</div>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">รายการสั่งซื้อที่อนุมัติแล้ว</h2>
           </div>
         </div>
       }
     >
       <Head title="รายการสั่งซื้อที่อนุมัติแล้ว" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           {tabs}
           
-          <DataTable
-            data={purchases.data}
-            columns={columns}
-            pagination={pagination}
-            onSearch={handleSearch}
-            onPerPageChange={handlePerPageChange}
-            onSort={handleSort}
-            sortField={filters.field}
-            sortDirection={filters.direction}
-            loading={loading}
-            title="รายการสั่งซื้อที่อนุมัติแล้ว"
-          />
+          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <DataTable
+              data={purchases.data}
+              columns={columns}
+              pagination={pagination}
+              onSearch={handleSearch}
+              onPerPageChange={handlePerPageChange}
+              onSort={handleSort}
+              sortField={filters.field}
+              sortDirection={filters.direction}
+              loading={loading}
+              title="รายการสั่งซื้อที่อนุมัติแล้ว"
+            />
+          </div>
         </div>
       </div>
     </AuthenticatedLayout>

@@ -44,7 +44,7 @@ export default function Index({ auth, customers, filters }: CustomersProps) {
       sortable: true,
       render: (customer: Customer) => (
         <div>
-          <div className="font-medium text-gray-900">{customer.name}</div>
+          <div className="font-medium text-gray-900 dark:text-gray-100">{customer.name}</div>
         </div>
       )
     },
@@ -63,7 +63,7 @@ export default function Index({ auth, customers, filters }: CustomersProps) {
       label: 'ที่อยู่',
       sortable: false,
       render: (customer: Customer) => (
-        <div className="text-wrap" style={{ maxWidth: '300px' }}>
+        <div className="max-w-xs break-words">
           {customer.address}
         </div>
       )
@@ -73,22 +73,22 @@ export default function Index({ auth, customers, filters }: CustomersProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (customer: Customer) => (
-        <div className="btn-list">
+        <div className="flex items-center space-x-2">
           <Link 
             href={route('customers.show', customer.id)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             ดู
           </Link>
           <Link 
             href={route('customers.edit', customer.id)} 
-            className="btn btn-sm btn-primary"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             แก้ไข
           </Link>
           <button 
             onClick={() => handleDelete(customer.id)}
-            className="btn btn-sm btn-danger"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             ลบ
           </button>
@@ -155,29 +155,25 @@ export default function Index({ auth, customers, filters }: CustomersProps) {
 
   // ปุ่มสำหรับใส่ใน actions ของ DataTable
   const tableActions = (
-    <>
+    <div className="flex items-center space-x-3">
       <Link 
         href={route('customers.create')}
-        className="btn btn-primary d-none d-sm-inline-block"
+        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>
         เพิ่มลูกค้าใหม่
       </Link>
       <Link 
         href={route('customers.create')}
-        className="btn btn-primary d-sm-none btn-icon"
+        className="sm:hidden inline-flex items-center p-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>
       </Link>
-    </>
+    </div>
   )
 
   // การจัดรูปแบบข้อมูลการแบ่งหน้าสำหรับ DataTable
@@ -199,18 +195,22 @@ export default function Index({ auth, customers, filters }: CustomersProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">รายการ</div>
-            <h2 className="page-title">ลูกค้า</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+              <div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">รายการ</div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">ลูกค้า</h2>
+              </div>
+            </div>
           </div>
         </div>
       }
     >
       <Head title="ลูกค้า" />
       
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="pb-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
           <DataTable

@@ -41,7 +41,7 @@ export default function Settings({ auth, user }: SettingsProps) {
     <AuthenticatedLayout user={auth.user}>
       <Head title="การตั้งค่าบัญชี" />
       
-      <div className="py-12">
+      <div className="pb-12">
         <div className="container-xl">
           <Breadcrumbs items={breadcrumbsItems} />
           

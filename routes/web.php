@@ -70,31 +70,37 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/pending', OrderPendingController::class)->name('orders.pending');
     Route::get('/orders/complete', OrderCompleteController::class)->name('orders.complete');
-
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 
+    // Route Invoices
     Route::post('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
 
-    // SHOW ORDER
+    // Route SHOW ORDER
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/update/{order}', [OrderController::class, 'update'])->name('orders.update');
 
-    // DUES
+    // Route DUES
     Route::get('/due/orders/', [DueOrderController::class, 'index'])->name('due.index');
     Route::get('/due/order/view/{order}', [DueOrderController::class, 'show'])->name('due.show');
     Route::get('/due/order/edit/{order}', [DueOrderController::class, 'edit'])->name('due.edit');
     Route::put('/due/order/update/{order}', [DueOrderController::class, 'update'])->name('due.update');
 
     // TODO: Remove from OrderController
-    Route::get('/orders/details/{order_id}/download', [OrderController::class, 'downloadInvoice'])->name('order.downloadInvoice');
+    Route::get('/orders/details/{order_id}/download', [OrderController::class, 'downloadInvoice'])->name('orders.invoice.download');
 
     // Route Purchases
     Route::get('/purchases/approved', [PurchaseController::class, 'approvedPurchases'])->name('purchases.approvedPurchases');
     Route::get('/purchases/report', [PurchaseController::class, 'dailyPurchaseReport'])->name('purchases.dailyPurchaseReport');
     Route::get('/purchases/report/export', [PurchaseController::class, 'getPurchaseReport'])->name('purchases.getPurchaseReport');
     Route::post('/purchases/report/export', [PurchaseController::class, 'exportPurchaseReport'])->name('purchases.exportPurchaseReport');
+    Route::get('/purchases/{purchase}/print', [PurchaseController::class, 'printPurchase'])->name('purchases.print');
 
+    // เพิ่มเส้นทางสำหรับแสดงรายการตามสถานะ
+    Route::get('/purchases/pending', [PurchaseController::class, 'pendingPurchases'])->name('purchases.pending');
+    Route::get('/purchases/complete', [PurchaseController::class, 'completePurchases'])->name('purchases.complete');
+    Route::get('/purchases/due', [PurchaseController::class, 'duePurchases'])->name('purchases.due');
+    
     Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
     Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchases.create');
     Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchases.store');

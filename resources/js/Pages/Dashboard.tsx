@@ -160,7 +160,7 @@ export default function Dashboard({
     >
       <Head title="แดชบอร์ด" />
 
-      <div className="py-12">
+      <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* สินค้าและหมวดหมู่ */}

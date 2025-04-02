@@ -140,8 +140,18 @@ class OrderController extends Controller
             ->where('id', $order)
             ->first();
 
+        // เพิ่มข้อมูลบริษัทสำหรับการพิมพ์
+        $company = [
+            'name' => config('app.name', 'Laravel'),
+            'email' => 'info@example.com',
+            'phone' => '0812345678',
+            'address' => '123 ถนนสุขุมวิท กรุงเทพฯ 10110',
+            'logo' => asset('images/logo.png'),
+        ];
+
         return Inertia::render('Orders/Print', [
             'order' => $order,
+            'company' => $company
         ]);
     }
 }

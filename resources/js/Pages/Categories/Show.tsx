@@ -37,7 +37,7 @@ export default function Show({ auth, category, products }: ShowProps) {
       label: 'ชื่อสินค้า',
       render: (product: Product) => (
         <div>
-          <div className="font-medium text-gray-900">{product.name}</div>
+          <div className="font-medium text-gray-900 dark:text-gray-100">{product.name}</div>
         </div>
       )
     },
@@ -58,7 +58,7 @@ export default function Show({ auth, category, products }: ShowProps) {
       field: 'selling_price',
       label: 'ราคาขาย',
       render: (product: Product) => (
-        <span>฿{product.selling_price.toLocaleString('th-TH')}</span>
+        <span className="text-gray-900 dark:text-gray-100">฿{product.selling_price.toLocaleString('th-TH')}</span>
       )
     },
     {
@@ -66,16 +66,16 @@ export default function Show({ auth, category, products }: ShowProps) {
       label: 'จัดการ',
       className: 'w-1',
       render: (product: Product) => (
-        <div className="btn-list">
+        <div className="flex items-center space-x-2">
           <Link 
             href={route('products.show', product.id)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             ดู
           </Link>
           <Link 
             href={route('products.edit', product.id)} 
-            className="btn btn-sm btn-primary"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             แก้ไข
           </Link>
@@ -94,61 +94,63 @@ export default function Show({ auth, category, products }: ShowProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="row g-2 align-items-center">
-          <div className="container-xl">
-            <div className="page-pretitle">รายละเอียด</div>
-            <h2 className="page-title">หมวดหมู่: {category.name}</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400">รายละเอียด</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                หมวดหมู่: {category.name}
+              </h2>
+            </div>
           </div>
         </div>
       }
     >
       <Head title={`รายละเอียดหมวดหมู่ - ${category.name}`} />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="py-6">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           
-          <div className="row">
-            <div className="col-md-4">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">ข้อมูลหมวดหมู่</h3>
-                  <div className="card-actions">
-                    <Link href={route('categories.edit', category.id)} className="btn btn-primary">
-                      แก้ไขข้อมูล
-                    </Link>
-                  </div>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="md:w-1/3">
+              <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div className="border-b border-gray-200 dark:border-gray-700 p-4 flex justify-between items-center">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">ข้อมูลหมวดหมู่</h3>
+                  <Link href={route('categories.edit', category.slug)} className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    แก้ไขข้อมูล
+                  </Link>
                 </div>
-                <div className="card-body">
-                  <div className="mb-3">
-                    <div className="row">
-                      <div className="col-md-4 fw-bold">ชื่อ</div>
-                      <div className="col-md-8">{category.name}</div>
+                <div className="p-4">
+                  <div className="mb-4">
+                    <div className="flex flex-col md:flex-row">
+                      <div className="md:w-1/3 font-semibold text-gray-700 dark:text-gray-300">ชื่อ</div>
+                      <div className="md:w-2/3 text-gray-900 dark:text-gray-100">{category.name}</div>
                     </div>
                   </div>
-                  <div className="mb-3">
-                    <div className="row">
-                      <div className="col-md-4 fw-bold">Slug</div>
-                      <div className="col-md-8">{category.slug}</div>
+                  <div className="mb-4">
+                    <div className="flex flex-col md:flex-row">
+                      <div className="md:w-1/3 font-semibold text-gray-700 dark:text-gray-300">Slug</div>
+                      <div className="md:w-2/3 text-gray-900 dark:text-gray-100">{category.slug}</div>
                     </div>
                   </div>
-                  <div className="mb-3">
-                    <div className="row">
-                      <div className="col-md-4 fw-bold">วันที่สร้าง</div>
-                      <div className="col-md-8">{new Date(category.created_at).toLocaleDateString('th-TH')}</div>
+                  <div className="mb-4">
+                    <div className="flex flex-col md:flex-row">
+                      <div className="md:w-1/3 font-semibold text-gray-700 dark:text-gray-300">วันที่สร้าง</div>
+                      <div className="md:w-2/3 text-gray-900 dark:text-gray-100">{new Date(category.created_at).toLocaleDateString('th-TH')}</div>
                     </div>
                   </div>
                   <div>
-                    <div className="row">
-                      <div className="col-md-4 fw-bold">อัปเดตล่าสุด</div>
-                      <div className="col-md-8">{new Date(category.updated_at).toLocaleDateString('th-TH')}</div>
+                    <div className="flex flex-col md:flex-row">
+                      <div className="md:w-1/3 font-semibold text-gray-700 dark:text-gray-300">อัปเดตล่าสุด</div>
+                      <div className="md:w-2/3 text-gray-900 dark:text-gray-100">{new Date(category.updated_at).toLocaleDateString('th-TH')}</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="col-md-8">
+            <div className="md:w-2/3">
               <DataTable
                 data={products}
                 columns={columns}
@@ -158,11 +160,6 @@ export default function Show({ auth, category, products }: ShowProps) {
             </div>
           </div>
           
-          <div className="mt-3">
-            <Link href={route('categories.index')} className="btn btn-link">
-              กลับไปยังรายการหมวดหมู่
-            </Link>
-          </div>
         </div>
       </div>
     </AuthenticatedLayout>

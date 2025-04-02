@@ -64,12 +64,12 @@ export default function Index({ auth, customer, carts }: InvoiceProps) {
   })
 
   return (
-    <div className="container-xl print-margin">
+    <div className="max-w-7xl mx-auto print-margin">
       <Head title={`ใบแจ้งหนี้: ${customer.name}`} />
 
-      <div className="d-flex justify-content-between mb-3 no-print">
-        <button onClick={() => window.history.back()} className="btn btn-outline-secondary">
-          <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-left" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <div className="flex justify-between items-center mb-4 no-print">
+        <button onClick={() => window.history.back()} className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M5 12l14 0"></path>
             <path d="M5 12l6 6"></path>
@@ -78,8 +78,8 @@ export default function Index({ auth, customer, carts }: InvoiceProps) {
           ย้อนกลับ
         </button>
         
-        <button onClick={handlePrint} className="btn btn-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-printer" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <button onClick={handlePrint} className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"></path>
             <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"></path>
@@ -89,110 +89,108 @@ export default function Index({ auth, customer, carts }: InvoiceProps) {
         </button>
       </div>
 
-      <div className="card print-content">
-        <div className="card-body">
-          <div className="d-flex justify-content-between mb-4">
+      <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden print-content">
+        <div className="p-6">
+          <div className="flex flex-wrap justify-between mb-6">
             <div>
-              <h1 className="mb-1">ใบแจ้งหนี้</h1>
-              <h2 className="text-muted">เลขที่: INV-{new Date().getFullYear()}-{String(customer.id).padStart(4, '0')}</h2>
+              <h1 className="text-2xl font-bold mb-1 text-gray-900 dark:text-gray-100">ใบแจ้งหนี้</h1>
+              <h2 className="text-lg text-gray-600 dark:text-gray-400">เลขที่: INV-{new Date().getFullYear()}-{String(customer.id).padStart(4, '0')}</h2>
             </div>
-            <div className="text-end">
-              <h2 className="mb-1">บริษัท ABC จำกัด</h2>
-              <p className="mb-0">123 ถนนสุขุมวิท แขวงคลองเตย</p>
-              <p className="mb-0">เขตคลองเตย กรุงเทพฯ 10110</p>
-              <p className="mb-0">โทร: 02-123-4567</p>
-              <p className="mb-0">อีเมล: info@abccompany.co.th</p>
-            </div>
-          </div>
-
-          <hr className="mb-4" />
-
-          <div className="row mb-4">
-            <div className="col-6">
-              <h3 className="mb-2">ลูกค้า</h3>
-              <p className="mb-1"><strong>ชื่อ:</strong> {customer.name}</p>
-              <p className="mb-1"><strong>อีเมล:</strong> {customer.email}</p>
-              <p className="mb-1"><strong>โทรศัพท์:</strong> {customer.phone}</p>
-              <p className="mb-1"><strong>ที่อยู่:</strong> {customer.address}</p>
-            </div>
-            <div className="col-6 text-end">
-              <h3 className="mb-2">รายละเอียด</h3>
-              <p className="mb-1"><strong>วันที่:</strong> {today}</p>
-              <p className="mb-1"><strong>เลขประจำตัวผู้เสียภาษี:</strong> 0123456789012</p>
-              <p className="mb-1"><strong>เงื่อนไขการชำระเงิน:</strong> 30 วัน</p>
+            <div className="text-right">
+              <h2 className="text-xl font-semibold mb-1 text-gray-900 dark:text-gray-100">บริษัท ABC จำกัด</h2>
+              <p className="text-gray-600 dark:text-gray-400">123 ถนนสุขุมวิท แขวงคลองเตย</p>
+              <p className="text-gray-600 dark:text-gray-400">เขตคลองเตย กรุงเทพฯ 10110</p>
+              <p className="text-gray-600 dark:text-gray-400">โทร: 02-123-4567</p>
+              <p className="text-gray-600 dark:text-gray-400">อีเมล: info@abccompany.co.th</p>
             </div>
           </div>
 
-          <div className="table-responsive mb-4">
-            <table className="table table-bordered table-vcenter">
-              <thead>
-                <tr className="bg-light">
-                  <th className="text-center">ลำดับ</th>
-                  <th>รหัสสินค้า</th>
-                  <th>รายการ</th>
-                  <th className="text-end">จำนวน</th>
-                  <th className="text-end">ราคาต่อหน่วย</th>
-                  <th className="text-end">จำนวนเงิน</th>
+          <hr className="border-t border-gray-200 dark:border-gray-700 mb-6" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h3 className="text-lg font-medium mb-3 text-gray-900 dark:text-gray-100">ลูกค้า</h3>
+              <p className="mb-1 text-gray-600 dark:text-gray-400"><span className="font-medium">ชื่อ:</span> {customer.name}</p>
+              <p className="mb-1 text-gray-600 dark:text-gray-400"><span className="font-medium">อีเมล:</span> {customer.email}</p>
+              <p className="mb-1 text-gray-600 dark:text-gray-400"><span className="font-medium">โทรศัพท์:</span> {customer.phone}</p>
+              <p className="mb-1 text-gray-600 dark:text-gray-400"><span className="font-medium">ที่อยู่:</span> {customer.address}</p>
+            </div>
+            <div className="text-right">
+              <h3 className="text-lg font-medium mb-3 text-gray-900 dark:text-gray-100">รายละเอียด</h3>
+              <p className="mb-1 text-gray-600 dark:text-gray-400"><span className="font-medium">วันที่:</span> {today}</p>
+              <p className="mb-1 text-gray-600 dark:text-gray-400"><span className="font-medium">เลขประจำตัวผู้เสียภาษี:</span> 0123456789012</p>
+              <p className="mb-1 text-gray-600 dark:text-gray-400"><span className="font-medium">เงื่อนไขการชำระเงิน:</span> 30 วัน</p>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto mb-6">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider text-center">ลำดับ</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">รหัสสินค้า</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">รายการ</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider text-right">จำนวน</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider text-right">ราคาต่อหน่วย</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider text-right">จำนวนเงิน</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {carts.map((item, index) => (
-                  <tr key={item.id}>
-                    <td className="text-center">{index + 1}</td>
-                    <td>{item.options.product?.code || '-'}</td>
-                    <td>{item.name}</td>
-                    <td className="text-end">{item.qty}</td>
-                    <td className="text-end">฿{(item.price / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</td>
-                    <td className="text-end">฿{((item.price * item.qty) / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</td>
+                  <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-center">{index + 1}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.options.product?.code || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-right">{item.qty}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-right">฿{(item.price / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-right">฿{((item.price * item.qty) / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
-                <tr>
-                  <th colSpan={5} className="text-end">ยอดรวม:</th>
-                  <th className="text-end">฿{(subTotal / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</th>
+                <tr className="bg-gray-50 dark:bg-gray-700">
+                  <th colSpan={5} className="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-100 text-right">ยอดรวม:</th>
+                  <th className="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-100 text-right">฿{(subTotal / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</th>
                 </tr>
-                <tr>
-                  <th colSpan={5} className="text-end">ภาษีมูลค่าเพิ่ม (7%):</th>
-                  <th className="text-end">฿{(vat / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</th>
+                <tr className="bg-gray-50 dark:bg-gray-700">
+                  <th colSpan={5} className="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-100 text-right">ภาษีมูลค่าเพิ่ม (7%):</th>
+                  <th className="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-100 text-right">฿{(vat / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</th>
                 </tr>
-                <tr>
-                  <th colSpan={5} className="text-end">ยอดรวมทั้งสิ้น:</th>
-                  <th className="text-end">฿{(total / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</th>
+                <tr className="bg-gray-50 dark:bg-gray-700">
+                  <th colSpan={5} className="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-100 text-right">ยอดรวมทั้งสิ้น:</th>
+                  <th className="px-6 py-3 text-sm font-medium text-gray-900 dark:text-gray-100 text-right">฿{(total / 100).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</th>
                 </tr>
               </tfoot>
             </table>
           </div>
 
-          <hr className="mb-4" />
+          <hr className="border-t border-gray-200 dark:border-gray-700 mb-6" />
 
-          <div className="row mb-4">
-            <div className="col-8">
-              <h3 className="mb-2">หมายเหตุ</h3>
-              <p>กรุณาชำระเงินภายในกำหนด 30 วัน นับจากวันที่ออกใบแจ้งหนี้</p>
-              <p>การชำระเงินสามารถทำได้โดยการโอนเงินเข้าบัญชีบริษัท หรือชำระเป็นเงินสด</p>
-              <h4 className="mt-3">รายละเอียดการชำระเงิน</h4>
-              <p className="mb-1">ธนาคารกสิกรไทย</p>
-              <p className="mb-1">เลขที่บัญชี: 123-4-56789-0</p>
-              <p className="mb-1">ชื่อบัญชี: บริษัท ABC จำกัด</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div className="md:col-span-3">
+              <h3 className="text-lg font-medium mb-3 text-gray-900 dark:text-gray-100">หมายเหตุ</h3>
+              <p className="mb-2 text-gray-600 dark:text-gray-400">กรุณาชำระเงินภายในกำหนด 30 วัน นับจากวันที่ออกใบแจ้งหนี้</p>
+              <p className="mb-4 text-gray-600 dark:text-gray-400">การชำระเงินสามารถทำได้โดยการโอนเงินเข้าบัญชีบริษัท หรือชำระเป็นเงินสด</p>
+              <h4 className="text-base font-medium mb-2 text-gray-900 dark:text-gray-100">รายละเอียดการชำระเงิน</h4>
+              <p className="mb-1 text-gray-600 dark:text-gray-400">ธนาคารกสิกรไทย</p>
+              <p className="mb-1 text-gray-600 dark:text-gray-400">เลขที่บัญชี: 123-4-56789-0</p>
+              <p className="mb-1 text-gray-600 dark:text-gray-400">ชื่อบัญชี: บริษัท ABC จำกัด</p>
             </div>
-            <div className="col-4">
+            <div className="md:col-span-1">
               <div className="text-center">
-                <div className="mb-5">
-                  <br />
-                  <br />
-                  <p className="border-top pt-2">ลายเซ็นผู้รับสินค้า</p>
+                <div className="mb-12">
+                  <div className="h-16"></div>
+                  <p className="border-t border-gray-200 dark:border-gray-700 pt-2 text-gray-600 dark:text-gray-400">ลายเซ็นผู้รับสินค้า</p>
                 </div>
                 <div>
-                  <br />
-                  <br />
-                  <p className="border-top pt-2">ลายเซ็นผู้มีอำนาจ</p>
+                  <div className="h-16"></div>
+                  <p className="border-t border-gray-200 dark:border-gray-700 pt-2 text-gray-600 dark:text-gray-400">ลายเซ็นผู้มีอำนาจ</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="text-center text-muted mt-5">
+          <div className="text-center text-gray-500 dark:text-gray-400 mt-8">
             <p>เอกสารนี้ออกโดยระบบคอมพิวเตอร์ ไม่ต้องลงลายมือชื่อ</p>
             <p>ขอบคุณที่ใช้บริการ</p>
           </div>

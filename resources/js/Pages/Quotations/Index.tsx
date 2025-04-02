@@ -250,7 +250,7 @@ export default function Index({ auth, quotations, filters }: QuotationsProps) {
     >
       <Head title="ใบเสนอราคา" />
       
-      <div className="py-12">
+      <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
           

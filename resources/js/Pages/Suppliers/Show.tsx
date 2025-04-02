@@ -51,7 +51,10 @@ export default function Show({ auth, supplier }: ShowProps) {
       label: 'เลขที่ใบสั่งซื้อ',
       sortable: true,
       render: (purchase: Purchase) => (
-        <Link href={route('purchases.show', purchase.id)}>
+        <Link 
+          href={route('purchases.show', purchase.id)}
+          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+        >
           {purchase.purchase_no}
         </Link>
       )
@@ -66,7 +69,7 @@ export default function Show({ auth, supplier }: ShowProps) {
       label: 'จำนวนเงินรวม',
       sortable: true,
       render: (purchase: Purchase) => (
-        <span>฿{parseFloat(purchase.total_amount.toString()).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</span>
+        <span className="font-medium text-gray-900 dark:text-gray-100">฿{parseFloat(purchase.total_amount.toString()).toLocaleString('th-TH', { minimumFractionDigits: 2 })}</span>
       )
     },
     {
@@ -74,14 +77,14 @@ export default function Show({ auth, supplier }: ShowProps) {
       label: 'สถานะ',
       sortable: true,
       render: (purchase: Purchase) => {
-        let statusClass = 'badge bg-secondary me-1'
+        let statusClass = 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
         
         if (purchase.status === 'completed') {
-          statusClass = 'badge bg-success me-1'
+          statusClass = 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
         } else if (purchase.status === 'pending') {
-          statusClass = 'badge bg-warning me-1'
+          statusClass = 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
         } else if (purchase.status === 'cancelled') {
-          statusClass = 'badge bg-danger me-1'
+          statusClass = 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
         }
         
         return <span className={statusClass}>{purchase.status}</span>
@@ -91,16 +94,16 @@ export default function Show({ auth, supplier }: ShowProps) {
       field: 'actions',
       label: 'จัดการ',
       render: (purchase: Purchase) => (
-        <div className="btn-list">
+        <div className="flex items-center space-x-2">
           <Link 
             href={route('purchases.show', purchase.id)} 
-            className="btn btn-sm"
+            className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             ดู
           </Link>
           <Link 
             href={route('purchases.edit', purchase.id)} 
-            className="btn btn-sm btn-primary"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             แก้ไข
           </Link>
@@ -113,103 +116,100 @@ export default function Show({ auth, supplier }: ShowProps) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="page-header d-print-none">
-          <div className="container-xl">
-            <div className="page-pretitle">ข้อมูล</div>
-            <h2 className="page-title">{supplier.name}</h2>
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-sm text-gray-500 dark:text-gray-400">ข้อมูล</div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{supplier.name}</h2>
           </div>
         </div>
       }
     >
       <Head title={`ซัพพลายเออร์: ${supplier.name}`} />
 
-      <div className="page-body">
-        <div className="container-xl">
+      <div className="pb-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbsItems} />
 
-          <div className="row">
-            <div className="col-lg-4">
-              <div className="card">
-                <div className="card-body">
-                  <h3 className="card-title">รูปโปรไฟล์</h3>
-                  <div className="text-center">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1">
+              <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">รูปโปรไฟล์</h3>
+                </div>
+                <div className="p-6">
+                  <div className="flex justify-center">
                     <img
                       src={supplier.photo ? `/storage/${supplier.photo}` : '/assets/img/demo/user-placeholder.svg'}
                       alt={supplier.name}
-                      className="rounded"
-                      style={{ maxWidth: '100%', height: 'auto', maxHeight: '250px' }}
+                      className="rounded-lg border border-gray-200 dark:border-gray-700 w-full max-w-[250px]"
                     />
                   </div>
                 </div>
-                <div className="card-footer">
-                  <div className="d-flex">
-                    <Link
-                      href={route('suppliers.edit', supplier.id)}
-                      className="btn btn-link"
-                    >
-                      แก้ไขซัพพลายเออร์
-                    </Link>
-                    <Link
-                      href={route('suppliers.index')}
-                      className="btn btn-link ms-auto"
-                    >
-                      กลับไปยังรายการซัพพลายเออร์
-                    </Link>
-                  </div>
+                <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 flex">
+                  <Link
+                    href={route('suppliers.edit', supplier.id)}
+                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
+                  >
+                    แก้ไขซัพพลายเออร์
+                  </Link>
+                  <Link
+                    href={route('suppliers.index')}
+                    className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium ml-auto"
+                  >
+                    กลับไปยังรายการซัพพลายเออร์
+                  </Link>
                 </div>
               </div>
             </div>
 
-            <div className="col-lg-8">
-              <div className="card">
-                <div className="card-header">
-                  <div>
-                    <h3 className="card-title">รายละเอียดซัพพลายเออร์</h3>
-                  </div>
+            <div className="lg:col-span-2">
+              <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">รายละเอียดซัพพลายเออร์</h3>
                 </div>
-                <div className="table-responsive">
-                  <table className="table table-bordered card-table table-vcenter text-nowrap">
-                    <tbody>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                       <tr>
-                        <td style={{ width: '30%' }}>ชื่อ</td>
-                        <td>{supplier.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">ชื่อ</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{supplier.name}</td>
                       </tr>
                       <tr>
-                        <td>อีเมล</td>
-                        <td>{supplier.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">อีเมล</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{supplier.email}</td>
                       </tr>
                       <tr>
-                        <td>เบอร์โทรศัพท์</td>
-                        <td>{supplier.phone}</td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">เบอร์โทรศัพท์</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{supplier.phone}</td>
                       </tr>
                       <tr>
-                        <td>ที่อยู่</td>
-                        <td>{supplier.address}</td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">ที่อยู่</td>
+                        <td className="px-6 py-4 text-gray-900 dark:text-gray-100">{supplier.address}</td>
                       </tr>
                       <tr>
-                        <td>ชื่อร้าน</td>
-                        <td>{supplier.shopname}</td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">ชื่อร้าน</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{supplier.shopname}</td>
                       </tr>
                       <tr>
-                        <td>ประเภท</td>
-                        <td>{supplier.type.label}</td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">ประเภท</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{supplier.type.label}</td>
                       </tr>
                       {supplier.account_holder && (
                         <tr>
-                          <td>ชื่อเจ้าของบัญชี</td>
-                          <td>{supplier.account_holder}</td>
+                          <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">ชื่อเจ้าของบัญชี</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{supplier.account_holder}</td>
                         </tr>
                       )}
                       {supplier.account_number && (
                         <tr>
-                          <td>เลขที่บัญชี</td>
-                          <td>{supplier.account_number}</td>
+                          <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">เลขที่บัญชี</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{supplier.account_number}</td>
                         </tr>
                       )}
                       {supplier.bank_name && (
                         <tr>
-                          <td>ชื่อธนาคาร</td>
-                          <td>{supplier.bank_name}</td>
+                          <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 w-1/3">ชื่อธนาคาร</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{supplier.bank_name}</td>
                         </tr>
                       )}
                     </tbody>
@@ -218,11 +218,11 @@ export default function Show({ auth, supplier }: ShowProps) {
               </div>
 
               {supplier.purchases && supplier.purchases.length > 0 && (
-                <div className="card mt-3">
-                  <div className="card-header">
-                    <h3 className="card-title">รายการสั่งซื้อ</h3>
+                <div className="mt-6 bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">รายการสั่งซื้อ</h3>
                   </div>
-                  <div className="card-body">
+                  <div className="p-6">
                     <DataTable
                       data={supplier.purchases}
                       columns={purchaseColumns}

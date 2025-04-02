@@ -24,12 +24,12 @@
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
     </head>
-    <body class="font-sans antialiased">
+    <body>
         @inertia
 
         <!-- Tabler Core -->
-        <script src="{{ asset('dist/js/tabler.min.js') }}" defer></script>
+        {{-- <script src="{{ asset('dist/js/tabler.min.js') }}" defer></script>
         <script src="{{ asset('dist/js/demo.min.js') }}" defer></script>
-        <script src="{{ asset('dist/js/demo-theme.min.js') }}" defer></script>
+        <script src="{{ asset('dist/js/demo-theme.min.js') }}" defer></script> --}}
     </body>
 </html> 
